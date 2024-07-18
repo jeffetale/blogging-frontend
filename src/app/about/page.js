@@ -1,3 +1,5 @@
+// src/app/about/page.js
+
 import { About } from "@/components/about";
 
 export default function AboutPage() {

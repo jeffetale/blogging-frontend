@@ -1,3 +1,5 @@
+// src/app/new_blog/page.jsx
+
 'use client';
 
 import { BlogForm } from '@/components/BlogForm';

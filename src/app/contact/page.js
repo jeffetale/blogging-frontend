@@ -1,3 +1,5 @@
+// src/app/contact/page.js
+
 import { Contact } from "@/components/contact";
 
 export default function AboutPage() {

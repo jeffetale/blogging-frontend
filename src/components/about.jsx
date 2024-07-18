@@ -1,3 +1,5 @@
+// src/components/about.jsx
+
 import { Section } from "lucide-react";
 
 export function About(params) {

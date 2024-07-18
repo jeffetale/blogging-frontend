@@ -1,3 +1,5 @@
+// src/app/blog/[slug]/page.jsx
+
 import { notFound } from 'next/navigation';
 
 async function getBlogPost(slug) {

@@ -1,3 +1,5 @@
+//src/components/footer.jsx
+
 export function Footer() {
   return (
     <div>
