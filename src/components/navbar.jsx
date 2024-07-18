@@ -27,7 +27,7 @@ export function Navbar({ setSearchTerm }) {
             About
           </Link>
           <Link
-            href="#"
+            href="/new_blog"
             className="text-muted-foreground hover:text-foreground"
             prefetch={false}
           >

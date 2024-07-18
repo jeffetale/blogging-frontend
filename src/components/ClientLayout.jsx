@@ -7,14 +7,15 @@ import React from "react";
 export default function ClientLayout({ children }) {
   const [searchTerm, setSearchTerm] = useState("");
 
-  const childrenWithProps = React.Children.map(children, child => {
-    return React.cloneElement(child, { searchTerm, setSearchTerm });
+  const childrenWithProps = React.Children.map(children, (child) => {
+    return React.cloneElement(child, { searchTerm });
   });
 
   return (
     <>
       <Navbar setSearchTerm={setSearchTerm} />
-      {children}
+      {childrenWithProps}
     </>
   );
 }
+
