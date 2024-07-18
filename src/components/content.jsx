@@ -40,8 +40,7 @@ export function Content({ searchTerm = "" }) {
           className="bg-background rounded-md shadow-sm overflow-hidden"
         >
           <img
-            // src={post.image_url}
-            src="/placeholder.svg"
+            src={post.image_url}
             width={800}
             height={400}
             alt="Blog post image"
@@ -51,7 +50,6 @@ export function Content({ searchTerm = "" }) {
             <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
             <p className="text-muted-foreground mb-4">{post.content}</p>
             <Link
-              // href="#"
               href={`/blog/${post.id}`}
               className="inline-flex items-center gap-2 text-primary hover:underline"
             >

@@ -1,6 +1,7 @@
+'use client';
+
 import Link from "next/link";
 import { Input } from "./ui/input";
-import { useState } from "react";
 
 export function Navbar({ setSearchTerm }) {
   return (
@@ -12,7 +13,7 @@ export function Navbar({ setSearchTerm }) {
         </Link>
         <nav className="hidden md:flex items-center gap-6">
           <Link
-            href="#"
+            href="/"
             className="text-muted-foreground hover:text-foreground"
             prefetch={false}
           >

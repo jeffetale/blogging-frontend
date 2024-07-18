@@ -15,6 +15,13 @@ export default async function BlogPost({ params }) {
 
   return (
     <div>
+        <img
+            src={post.image_url}
+            width={800}
+            height={800}
+            alt="Blog post image"
+            className="w-full h-64 object-cover"
+          />
       <h1>{post.title}</h1>
       <p>{post.content}</p>
     </div>
