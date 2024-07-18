@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Input } from "./ui/input";
 
-export function Navbar() {
+export function Navbar({ setSearchTerm }) {
   return (
     <header className="bg-background border-b shadow-sm">
       <div className="container mx-auto px-4 py-4 md:py-6 flex items-center justify-between">
@@ -47,6 +47,7 @@ export function Navbar() {
             type="search"
             placeholder="Search..."
             className="pl-8 pr-4 py-2 rounded-md bg-muted text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
+            onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
       </div>
