@@ -1,6 +1,7 @@
 {
   "name": "blogging-site-frontend",
   "version": "0.1.0",
+  "proxy": "http://127.0.0.1:8000",
   "private": true,
   "scripts": {
     "dev": "next dev",
@@ -17,6 +18,8 @@
     "next": "14.2.4",
     "react": "^18",
     "react-dom": "^18",
+    "srw": "^0.0.4",
+    "swr": "^2.2.5",
     "tailwind-merge": "^2.3.0",
     "tailwindcss-animate": "^1.0.7"
   },
