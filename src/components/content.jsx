@@ -1,120 +1,66 @@
-'use client'
+"use client";
 
 import Link from "next/link";
-import useSWR from 'swr'
+import useSWR from "swr";
 
-const fetcher = (url) => fetch(url).then((res) => res.json())
+import { useRouter } from "next/router";
 
-export function Content({ searchTerm }) {
-  const {data, error, isLoading} = useSWR('http://127.0.0.1:8000/api/v1/blog_posts', fetcher)
+export default function BlogPost() {
+  const router = useRouter()
+  const { slug } = router.query
 
-  if (error) return <div>Failed to Load</div>
-  if (isLoading) return <div>Loading...</div>
-
-  const filteredPosts = data.filter(post => 
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  return (
+    <div>
+      <h1>Blog Post: {slug}</h1>
+      {/* Add your blog post content here */}
+    </div>
   )
+}
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export function Content({ searchTerm = "" }) {
+  const { data, error, isLoading } = useSWR(
+    "http://127.0.0.1:8000/api/v1/blog_posts",
+    fetcher
+  );
+
+  if (error) return <div>Failed to Load</div>;
+  if (isLoading) return <div>Loading...</div>;
+
+  const filteredPosts = data.filter((post) =>
+    post.title.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="space-y-8">
       {filteredPosts.map((post) => (
-        <article key={post.id} className="bg-background rounded-md shadow-sm overflow-hidden">
-        <img
-          src={post.image_url}
-          width={800}
-          height={400}
-          alt="Blog post image"
-          className="w-full h-48 object-cover"
-        />
-        <div className="p-6">
-          <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-          <p className="text-muted-foreground mb-4">{post.content}</p>
-          <Link href="#" className="inline-flex items-center gap-2 text-primary hover:underline">
-            Read more
-            <ArrowRightIcon className="w-4 h-4" />
-          </Link>
-        </div>
-      </article>
+        <article
+          key={post.id}
+          className="bg-background rounded-md shadow-sm overflow-hidden"
+        >
+          <img
+            // src={post.image_url}
+            src="/placeholder.svg"
+            width={800}
+            height={400}
+            alt="Blog post image"
+            className="w-full h-48 object-cover"
+          />
+          <div className="p-6">
+            <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
+            <p className="text-muted-foreground mb-4">{post.content}</p>
+            <Link
+              // href="#"
+              href={`/blog/${post.id}`}
+              className="inline-flex items-center gap-2 text-primary hover:underline"
+            >
+              Read more
+              <ArrowRightIcon className="w-4 h-4" />
+            </Link>
+          </div>
+        </article>
       ))}
-      {/* <article className="bg-background rounded-md shadow-sm overflow-hidden">
-        <img
-          src="/placeholder.svg"
-          width={800}
-          height={400}
-          alt="Blog post image"
-          className="w-full h-48 object-cover"
-        />
-        <div className="p-6">
-          <h2 className="text-2xl font-bold mb-2">
-            The Future of Web Development: Trends and Insights
-          </h2>
-          <p className="text-muted-foreground mb-4">
-            Explore the latest trends and technologies shaping the future of web
-            development, from AI-powered tools to the rise of serverless
-            architecture.
-          </p>
-          <Link
-            href="#"
-            className="inline-flex items-center gap-2 text-primary hover:underline"
-            prefetch={false}
-          >
-            Read more
-            <ArrowRightIcon className="w-4 h-4" />
-          </Link>
-        </div>
-      </article>
-      <article className="bg-background rounded-md shadow-sm overflow-hidden">
-        <img
-          src="/placeholder.svg"
-          width={800}
-          height={400}
-          alt="Blog post image"
-          className="w-full h-48 object-cover"
-        />
-        <div className="p-6">
-          <h2 className="text-2xl font-bold mb-2">
-            Mastering React Hooks: A Comprehensive Guide
-          </h2>
-          <p className="text-muted-foreground mb-4">
-            Dive deep into the world of React Hooks and learn how to leverage
-            them to build more efficient and maintainable applications.
-          </p>
-          <Link
-            href="#"
-            className="inline-flex items-center gap-2 text-primary hover:underline"
-            prefetch={false}
-          >
-            Read more
-            <ArrowRightIcon className="w-4 h-4" />
-          </Link>
-        </div>
-      </article>
-      <article className="bg-background rounded-md shadow-sm overflow-hidden">
-        <img
-          src="/placeholder.svg"
-          width={800}
-          height={400}
-          alt="Blog post image"
-          className="w-full h-48 object-cover"
-        />
-        <div className="p-6">
-          <h2 className="text-2xl font-bold mb-2">
-            Designing for Accessibility: Best Practices and Techniques
-          </h2>
-          <p className="text-muted-foreground mb-4">
-            Learn how to create inclusive and accessible web experiences that
-            cater to users with diverse needs and abilities.
-          </p>
-          <Link
-            href="#"
-            className="inline-flex items-center gap-2 text-primary hover:underline"
-            prefetch={false}
-          >
-            Read more
-            <ArrowRightIcon className="w-4 h-4" />
-          </Link>
-        </div>
-      </article> */}
     </div>
   );
 }

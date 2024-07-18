@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Input } from "./ui/input";
+import { useState } from "react";
 
 export function Navbar({ setSearchTerm }) {
   return (
@@ -18,7 +19,7 @@ export function Navbar({ setSearchTerm }) {
             Home
           </Link>
           <Link
-            href="#"
+            href="/about"
             className="text-muted-foreground hover:text-foreground"
             prefetch={false}
           >
@@ -32,7 +33,7 @@ export function Navbar({ setSearchTerm }) {
             Blog
           </Link>
           <Link
-            href="#"
+            href="/contact"
             className="text-muted-foreground hover:text-foreground"
             prefetch={false}
           >

@@ -1,8 +1,23 @@
+"use client";
+
 import { Card, CardContent, CardHeader } from "./ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import Link from "next/link";
+import useSWR from "swr";
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export function Overview() {
+  const { data, error, isLoading } = useSWR(
+    "http://127.0.0.1:8000/api/v1/blog_posts",
+    fetcher
+  );
+
+  if (error) return <div>Failed to Load</div>;
+  if (isLoading) return <div>Loading...</div>;
+
+  const filteredCategories = data.filter((post) => post.category.toLowerCase());
+
   return (
     <div>
       <Card>
@@ -13,16 +28,16 @@ export function Overview() {
               <AvatarFallback>JD</AvatarFallback>
             </Avatar>
             <div>
-              <h3 className="text-lg font-semibold">John Doe</h3>
+              <h3 className="text-lg font-semibold">Jeff Etale</h3>
               <p className="text-muted-foreground">Founder, Blog Inc.</p>
             </div>
           </div>
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            Welcome to my blog! I'm a passionate web developer and designer,
-            sharing my insights and experiences on the latest trends and
-            technologies in the industry.
+            Welcome to my blog! I'm a passionate web developer, designer and
+            ethical hacker, sharing my insights and experiences on the latest
+            trends and technologies in the industry.
           </p>
         </CardContent>
       </Card>
@@ -32,42 +47,18 @@ export function Overview() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-2">
-            <li>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-                prefetch={false}
-              >
-                Web Development
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-                prefetch={false}
-              >
-                Design
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-                prefetch={false}
-              >
-                Technology
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground"
-                prefetch={false}
-              >
-                Productivity
-              </Link>
-            </li>
+            {filteredCategories.map((post) => (
+              <li>
+                <Link
+                  key={post.id}
+                  href="#"
+                  className="text-muted-foreground hover:text-foreground"
+                  prefetch={false}
+                >
+                  {post.category}
+                </Link>
+              </li>
+            ))}
           </ul>
         </CardContent>
       </Card>
