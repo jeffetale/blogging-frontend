@@ -15,6 +15,9 @@ export function Overview() {
     fetcher
   );
 
+  const { data: posts } = useSWR("http://127.0.0.1:8000/api/v1/popular_posts", fetcher);
+
+
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
 
@@ -69,81 +72,24 @@ export function Overview() {
           <h3 className="text-lg font-semibold">Popular Posts</h3>
         </CardHeader>
         <CardContent>
-          <ul className="space-y-4">
-            <li>
-              <Link
-                href="#"
-                className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-                prefetch={false}
-              >
-                <img
-                  src="/placeholder.svg"
-                  width={80}
-                  height={80}
-                  alt="Popular post image"
-                  className="rounded-md"
-                />
-                <div>
-                  <h4 className="text-lg font-semibold">
-                    Mastering React Hooks: A Comprehensive Guide
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Dive deep into the world of React Hooks and learn how to
-                    leverage them to build more efficient and maintainable
-                    applications.
-                  </p>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-                prefetch={false}
-              >
-                <img
-                  src="/placeholder.svg"
-                  width={80}
-                  height={80}
-                  alt="Popular post image"
-                  className="rounded-md"
-                />
-                <div>
-                  <h4 className="text-lg font-semibold">
-                    Designing for Accessibility: Best Practices and Techniques
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Learn how to create inclusive and accessible web experiences
-                    that cater to users with diverse needs and abilities.
-                  </p>
-                </div>
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="#"
-                className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-                prefetch={false}
-              >
-                <img
-                  src="/placeholder.svg"
-                  width={80}
-                  height={80}
-                  alt="Popular post image"
-                  className="rounded-md"
-                />
-                <div>
-                  <h4 className="text-lg font-semibold">
-                    The Future of Web Development: Trends and Insights
-                  </h4>
-                  <p className="text-sm text-muted-foreground">
-                    Explore the latest trends and technologies shaping the
-                    future of web development, from AI-powered tools to the rise
-                    of serverless architecture.
-                  </p>
-                </div>
-              </Link>
-            </li>
+        <ul className="space-y-4">
+            {posts.map((post) => (
+              <li key={post.id}>
+                <Link href={`/blog/${post.id}`} className="flex items-center gap-4 text-muted-foreground hover:text-foreground">
+                  <img
+                    src={post.image_url}
+                    width={80}
+                    height={80}
+                    alt="Popular post image"
+                    className="rounded-md"
+                  />
+                  <div>
+                    <h4 className="text-lg font-semibold">{post.title}</h4>
+                    <p className="text-sm text-muted-foreground">{post.content}</p>
+                  </div>
+                </Link>
+              </li>
+            ))}
           </ul>
         </CardContent>
       </Card>
