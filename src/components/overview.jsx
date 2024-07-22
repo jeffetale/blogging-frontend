@@ -7,6 +7,8 @@ import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import Link from "next/link";
 import useSWR from "swr";
 
+import { useState } from "react";
+
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export function Overview({ setSelectedCategory }) {
@@ -24,7 +26,13 @@ export function Overview({ setSelectedCategory }) {
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
 
-  const uniqueCategories = new Set(data.map(post => post.category));
+  const uniqueCategories = new Set(data.map((post) => post.category));
+
+  const [selectedCategory, setCategory] = useState("");
+  const handleCategoryClick = (category) => {
+    setCategory(category);
+    setSelectedCategory(category);
+  };
 
   return (
     <div>
@@ -55,14 +63,27 @@ export function Overview({ setSelectedCategory }) {
         </CardHeader>
         <CardContent>
           <ul className="space-y-2">
-          {Array.from(uniqueCategories).map((category, index) => (
+            <li>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground font-extrabold font-weight:800 "
+                prefetch={false}
+                onClick={() => setSelectedCategory("")}
+              >
+                Show All
+              </Link>
+            </li>
+            {Array.from(uniqueCategories).map((category, index) => (
               <li>
                 <Link
-                  key={index}
                   href="#"
-                  className="text-muted-foreground hover:text-foreground"
+                  className={`text-muted-foreground hover:text-foreground ${
+                    selectedCategory === category
+                      ? "text-foreground font-bold"
+                      : ""
+                  }`}
                   prefetch={false}
-                  onClick={() => setSelectedCategory(category)}
+                  onClick={() => handleCategoryClick(category)}
                 >
                   {category}
                 </Link>
