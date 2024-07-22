@@ -3,6 +3,7 @@
 'use client';
 
 import { useState } from 'react';
+import Cookies from 'js-cookie';
 
 export  function BlogForm() {
   const [formData, setFormData] = useState({
@@ -38,10 +39,12 @@ export  function BlogForm() {
     if (Object.keys(validationErrors).length === 0) {
       setIsSubmitting(true);
       try {
+        const token = Cookies.get('access_token');
         const response = await fetch('http://127.0.0.1:8000/api/v1/blog_posts', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         });

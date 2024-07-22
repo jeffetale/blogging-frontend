@@ -1,11 +1,20 @@
 // src/components/navbar.jsx
 
-'use client';
+"use client";
 
 import Link from "next/link";
 import { Input } from "./ui/input";
+import { LogoutButton } from "./Logout";
+import { isAuthenticated } from "@/lib/auth";
+import { useState, useEffect } from "react";
 
 export function Navbar({ setSearchTerm }) {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    setLoggedIn(isAuthenticated());
+  }, []);
+
   return (
     <header className="bg-background border-b shadow-sm">
       <div className="container mx-auto px-4 py-4 md:py-6 flex items-center justify-between">
@@ -42,6 +51,7 @@ export function Navbar({ setSearchTerm }) {
           >
             Contact
           </Link>
+          {loggedIn && <LogoutButton />}
         </nav>
         <div className="relative hidden md:block">
           <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
