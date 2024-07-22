@@ -1,20 +1,16 @@
-'use client';
+"use client";
 
-import { useRouter } from 'next/navigation';
-import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export function LogoutButton() {
   const router = useRouter();
+  const { logout } = useAuth();
 
   const handleLogout = () => {
-    Cookies.remove('access_token');
-    router.push('/signin');
-    window.location.reload();
+    logout();
+    router.push("/signin");
   };
 
-  return (
-    <button onClick={handleLogout}>
-      Logout
-    </button>
-  );
+  return <button onClick={handleLogout}>Logout</button>;
 }
