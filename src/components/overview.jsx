@@ -9,7 +9,7 @@ import useSWR from "swr";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export function Overview() {
+export function Overview({ setSelectedCategory }) {
   const { data, error, isLoading } = useSWR(
     "http://127.0.0.1:8000/api/v1/blog_posts",
     fetcher
@@ -62,6 +62,7 @@ export function Overview() {
                   href="#"
                   className="text-muted-foreground hover:text-foreground"
                   prefetch={false}
+                  onClick={() => setSelectedCategory(category)}
                 >
                   {category}
                 </Link>

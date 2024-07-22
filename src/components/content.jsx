@@ -21,7 +21,7 @@ export default function BlogPost() {
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
-export function Content({ searchTerm = "" }) {
+export function Content({ searchTerm = "", selectedCategory = "" }) {
   const { data, error, isLoading } = useSWR(
     "http://127.0.0.1:8000/api/v1/blog_posts",
     fetcher
@@ -30,9 +30,11 @@ export function Content({ searchTerm = "" }) {
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
 
-  const filteredPosts = data.filter((post) =>
-    post.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredPosts = data.filter((post) => {
+    const matchesSearchTerm = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory ? post.category === selectedCategory : true;
+    return matchesSearchTerm && matchesCategory;
+  });
 
   return (
     <div className="space-y-8">
