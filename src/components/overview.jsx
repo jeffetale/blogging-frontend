@@ -24,7 +24,7 @@ export function Overview() {
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
 
-  const filteredCategories = data.filter((post) => post.category.toLowerCase());
+  const uniqueCategories = new Set(data.map(post => post.category));
 
   return (
     <div>
@@ -55,15 +55,15 @@ export function Overview() {
         </CardHeader>
         <CardContent>
           <ul className="space-y-2">
-            {filteredCategories.map((post) => (
+          {Array.from(uniqueCategories).map((category, index) => (
               <li>
                 <Link
-                  key={post.id}
+                  key={index}
                   href="#"
                   className="text-muted-foreground hover:text-foreground"
                   prefetch={false}
                 >
-                  {post.category}
+                  {category}
                 </Link>
               </li>
             ))}
