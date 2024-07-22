@@ -6,15 +6,11 @@ import Link from "next/link";
 import { Input } from "./ui/input";
 import { LogoutButton } from "./Logout";
 import { isAuthenticated } from "@/lib/auth";
-import { useState, useEffect } from "react";
+import { useAuth } from "@/context/AuthContext";
 
 export function Navbar({ setSearchTerm }) {
-  const [loggedIn, setLoggedIn] = useState(false);
-
-  useEffect(() => {
-    setLoggedIn(isAuthenticated());
-  }, []);
-
+  const { loggedIn } = useAuth();
+  
   return (
     <header className="bg-background border-b shadow-sm">
       <div className="container mx-auto px-4 py-4 md:py-6 flex items-center justify-between">
