@@ -15,8 +15,11 @@ export function Overview() {
     fetcher
   );
 
-  const { data: posts } = useSWR("http://127.0.0.1:8000/api/v1/popular_posts", fetcher);
-
+  const {
+    data: posts,
+    error: postsError,
+    isLoading: postsLoading,
+  } = useSWR("http://127.0.0.1:8000/api/v1/popular_posts", fetcher);
 
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
@@ -72,25 +75,34 @@ export function Overview() {
           <h3 className="text-lg font-semibold">Popular Posts</h3>
         </CardHeader>
         <CardContent>
-        <ul className="space-y-4">
-            {posts.map((post) => (
-              <li key={post.id}>
-                <Link href={`/blog/${post.id}`} className="flex items-center gap-4 text-muted-foreground hover:text-foreground">
-                  <img
-                    src={post.image_url}
-                    width={80}
-                    height={80}
-                    alt="Popular post image"
-                    className="rounded-md"
-                  />
-                  <div>
-                    <h4 className="text-lg font-semibold">{post.title}</h4>
-                    <p className="text-sm text-muted-foreground">{post.content}</p>
-                  </div>
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {postsError && <div>Failed to load popular posts</div>}
+          {postsLoading && <div>Loading popular posts...</div>}
+          {posts && (
+            <ul className="space-y-4">
+              {posts.map((post) => (
+                <li key={post.id}>
+                  <Link
+                    href={`/blog/${post.id}`}
+                    className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
+                  >
+                    <img
+                      src={post.image_url}
+                      width={80}
+                      height={80}
+                      alt="Popular post image"
+                      className="rounded-md"
+                    />
+                    <div>
+                      <h4 className="text-lg font-semibold">{post.title}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        {post.content}
+                      </p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
         </CardContent>
       </Card>
     </div>
