@@ -4,6 +4,7 @@
 
 import { useState } from 'react';
 import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
 
 export  function BlogForm() {
   const [formData, setFormData] = useState({
@@ -16,6 +17,7 @@ export  function BlogForm() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const router = useRouter();
 
   const handleChange = (e) => {
     setFormData({
@@ -60,6 +62,7 @@ export  function BlogForm() {
           category: '',
           image_url: '',
         });
+        router.push("/");
       } catch (error) {
         console.error("Error submitting form:", error);
       } finally {
