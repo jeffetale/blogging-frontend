@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
+import { FaEdit, FaTrash, FaClock, FaUser } from "react-icons/fa";
 
 async function getBlogPost(slug) {
   console.log(`Fetching blog post with slug: ${slug}`);
@@ -166,103 +167,116 @@ export default function BlogPost() {
   };
 
   if (error) {
-    return <div>{error}</div>;
+    return (
+      <div className="text-center text-red-600 text-2xl mt-10">{error}</div>
+    );
   }
 
   if (!post) {
-    return <div>Loading...</div>;
+    return <div className="text-center text-2xl mt-10">Loading...</div>;
   }
 
   return (
-    <div>
-      <img
-        src={post.image_url}
-        width={800}
-        height={800}
-        alt="Blog post image"
-        className="w-full h-64 object-cover"
-      />
+    <div className="max-w-4xl mx-auto px-4 py-8">
+      <div className="relative">
+        <img
+          src={post.image_url}
+          alt="Blog post cover"
+          className="w-full h-96 object-cover rounded-lg shadow-lg"
+        />
+        <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-6">
+          <h1 className="text-4xl font-bold text-white mb-2">{post.title}</h1>
+          <div className="flex items-center text-gray-300 space-x-4">
+            <span className="flex items-center">
+              <FaUser className="mr-2" /> {post.author || "Anonymous"}
+            </span>
+            <span className="flex items-center">
+              <FaClock className="mr-2" />{" "}
+              {new Date(post.created_at).toLocaleDateString()}
+            </span>
+          </div>
+        </div>
+      </div>
+
       {isEditing ? (
-        <div>
+        <div className="mt-8 bg-white p-6 rounded-lg shadow-md">
           <input
             type="text"
             value={editedTitle}
             onChange={(e) => setEditedTitle(e.target.value)}
-            className="w-full p-2 mb-4 border rounded"
+            className="w-full p-2 mb-4 text-2xl font-bold border-b-2 border-gray-300 focus:border-blue-500 outline-none"
           />
           <textarea
             value={editedContent}
             onChange={(e) => setEditedContent(e.target.value)}
-            className="w-full p-2 mb-4 border rounded"
-            rows="10"
+            className="w-full p-2 mb-4 min-h-[300px] border-2 border-gray-300 rounded focus:border-blue-500 outline-none"
           />
-          <button
-            onClick={handleSave}
-            className="mr-2 text-white bg-green-500 hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105 p-2 rounded"
-          >
-            Save
-          </button>
-          <button
-            onClick={handleCancel}
-            className="text-white bg-gray-500 hover:bg-gray-600 transition duration-300 ease-in-out transform hover:scale-105 p-2 rounded"
-          >
-            Cancel
-          </button>
+          <div className="flex justify-end space-x-4">
+            <button
+              onClick={handleSave}
+              className="px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105"
+            >
+              Save Changes
+            </button>
+            <button
+              onClick={handleCancel}
+              className="px-6 py-2 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition duration-300 ease-in-out transform hover:scale-105"
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       ) : (
-        <div>
-          <h1>{post.title}</h1>
-          <p>{post.content}</p>
+        <div className="mt-8">
+          <div className="prose prose-lg max-w-none">
+            {post.content.split("\n").map((paragraph, index) => (
+              <p key={index} className="mb-4">
+                {paragraph}
+              </p>
+            ))}
+          </div>
           {isOwner && (
-            <div>
+            <div className="mt-8 flex justify-end space-x-4">
               <button
                 onClick={handleEdit}
-                className="mt-4 mr-2 text-white bg-blue-500 hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105 p-2 rounded"
+                className="flex items-center px-4 py-2 bg-blue-500 text-white rounded-full hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105"
               >
-                Edit Post
+                <FaEdit className="mr-2" /> Edit Post
               </button>
               <button
                 onClick={handleDeleteClick}
-                className="mt-4 text-white bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105 p-2 rounded"
+                className="flex items-center px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105"
               >
-                Delete Post
+                <FaTrash className="mr-2" /> Delete Post
               </button>
             </div>
           )}
         </div>
       )}
+
       {showDeleteConfirm && (
-        <div
-          className="fixed inset-0 backdrop-blur-sm bg-black bg-opacity-50 overflow-y-auto h-full w-full flex items-center justify-center z-50"
-          id="my-modal"
-        >
-          <div className="relative p-6 border-0 rounded-lg shadow-lg bg-white w-96 max-w-md mx-auto">
-            <div className="mt-3 text-center">
-              <h3 className="text-xl leading-6 font-bold text-gray-900 mb-4">
-                Delete Post
-              </h3>
-              <div className="mt-2 px-7 py-3">
-                <p className="text-md text-gray-600">
-                  Are you sure you want to delete this post? This action cannot
-                  be undone.
-                </p>
-              </div>
-              <div className="items-center px-4 py-3">
-                <button
-                  id="delete-btn"
-                  className="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-300 mb-3"
-                  onClick={handleDeleteConfirm}
-                >
-                  Delete
-                </button>
-                <button
-                  id="cancel-btn"
-                  className="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-300 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400"
-                  onClick={handleDeleteCancel}
-                >
-                  Cancel
-                </button>
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-8 max-w-md w-full">
+            <h3 className="text-2xl font-bold text-gray-900 mb-4">
+              Confirm Deletion
+            </h3>
+            <p className="text-gray-600 mb-6">
+              Are you sure you want to delete this post? This action cannot be
+              undone.
+            </p>
+            <div className="flex justify-end space-x-4">
+              <button
+                onClick={handleDeleteConfirm}
+                className="px-6 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                Delete
+              </button>
+              <button
+                onClick={handleDeleteCancel}
+                className="px-6 py-2 bg-gray-300 text-gray-800 rounded-full hover:bg-gray-400 transition duration-300 ease-in-out transform hover:scale-105"
+              >
+                Cancel
+              </button>
             </div>
           </div>
         </div>
