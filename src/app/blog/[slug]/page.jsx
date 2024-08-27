@@ -26,13 +26,29 @@ async function checkOwnership(postId, token) {
   return data.is_owner;
 }
 
+async function updateBlogPost(postId, token, updatedData) {
+  const res = await fetch(`http://127.0.0.1:8000/api/v1/blog_posts/${postId}/`, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(updatedData),
+  });
+  if (!res.ok) throw new Error('Failed to update post');
+  return res.json();
+}
+
 export default function BlogPost() {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
   const [viewUpdated, setViewUpdated] = useState(false);
-  const { loggedIn, getAccessToken } = useAuth(); // Add getAccessToken here
+  const { loggedIn, getAccessToken } = useAuth();
+  const [isEditing, setIsEditing] = useState(false);
+  const [editedTitle, setEditedTitle] = useState('');
+  const [editedContent, setEditedContent] = useState('');
 
   useEffect(() => {
     console.log(`useEffect triggered with slug: ${slug}`);
@@ -78,6 +94,31 @@ export default function BlogPost() {
     };
   }, [slug, viewUpdated, loggedIn, getAccessToken]);
 
+  const handleEdit = () => {
+    setIsEditing(true);
+    setEditedTitle(post.title);
+    setEditedContent(post.content);
+  };
+
+  const handleCancel = () => {
+    setIsEditing(false);
+  };
+
+  const handleSave = async () => {
+    try {
+      const token = getAccessToken();
+      const updatedPost = await updateBlogPost(post.id, token, {
+        title: editedTitle,
+        content: editedContent,
+      });
+      setPost(updatedPost);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating post:', error);
+      setError('Failed to update post');
+    }
+  };
+
   if (error) {
     return <div>{error}</div>;
   }
@@ -95,12 +136,46 @@ export default function BlogPost() {
         alt="Blog post image"
         className="w-full h-64 object-cover"
       />
-      <h1>{post.title}</h1>
-      <p>{post.content}</p>
-      {isOwner && (
-        <button className="mt-4 text-white bg-blue-500 hover:bg-blue-700 p-2 rounded">
-          Edit Post
-        </button>
+      {isEditing ? (
+        <div>
+          <input
+            type="text"
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+            className="w-full p-2 mb-4 border rounded"
+          />
+          <textarea
+            value={editedContent}
+            onChange={(e) => setEditedContent(e.target.value)}
+            className="w-full p-2 mb-4 border rounded"
+            rows="10"
+          />
+          <button
+            onClick={handleSave}
+            className="mr-2 text-white bg-green-500 hover:bg-green-700 p-2 rounded"
+          >
+            Save
+          </button>
+          <button
+            onClick={handleCancel}
+            className="text-white bg-red-500 hover:bg-red-700 p-2 rounded"
+          >
+            Cancel
+          </button>
+        </div>
+      ) : (
+        <div>
+          <h1>{post.title}</h1>
+          <p>{post.content}</p>
+          {isOwner && (
+            <button
+              onClick={handleEdit}
+              className="mt-4 text-white bg-blue-500 hover:bg-blue-700 p-2 rounded"
+            >
+              Edit Post
+            </button>
+          )}
+        </div>
       )}
     </div>
   );
