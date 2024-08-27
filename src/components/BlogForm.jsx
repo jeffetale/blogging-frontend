@@ -1,29 +1,23 @@
-// src/components/BlogForm.jsx
-
 'use client';
 
 import { useState } from 'react';
 import Cookies from 'js-cookie';
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
-export  function BlogForm() {
+export function BlogForm(token) {
   const [formData, setFormData] = useState({
     title: '',
     content: '',
     category: '',
     image_url: '',
   });
-
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSubmitted, setIsSubmitted] = useState(false);
   const router = useRouter();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const validate = () => {
@@ -50,18 +44,7 @@ export  function BlogForm() {
           },
           body: JSON.stringify(formData),
         });
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        const data = await response.json();
-        console.log("Response Data:", data);
-        setIsSubmitted(true);
-        setFormData({
-          title: '',
-          content: '',
-          category: '',
-          image_url: '',
-        });
+        if (!response.ok) throw new Error('Network response was not ok');
         router.push("/");
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -74,65 +57,72 @@ export  function BlogForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <div>
-        <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
-        <input
-          type="text"
-          name="title"
-          id="title"
-          value={formData.title}
-          onChange={handleChange}
-          className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-        />
-        {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
-      </div>
-      <div>
-        <label htmlFor="content" className="block text-sm font-medium text-gray-700">Content</label>
-        <textarea
-          name="content"
-          id="content"
-          rows="5"
-          value={formData.content}
-          onChange={handleChange}
-          className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-        />
-        {errors.content && <p className="text-red-500 text-xs mt-1">{errors.content}</p>}
-      </div>
-      <div>
-        <label htmlFor="category" className="block text-sm font-medium text-gray-700">Category</label>
-        <input
-          type="text"
-          name="category"
-          id="category"
-          value={formData.category}
-          onChange={handleChange}
-          className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-        />
-        {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
-      </div>
-      <div>
-        <label htmlFor="image_url" className="block text-sm font-medium text-gray-700">Image URL</label>
-        <input
-          type="text"
-          name="image_url"
-          id="image_url"
-          value={formData.image_url}
-          onChange={handleChange}
-          className="mt-1 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
-        />
-        {errors.image_url && <p className="text-red-500 text-xs mt-1">{errors.image_url}</p>}
-      </div>
-      <div>
-        <button
-          type="submit"
-          disabled={isSubmitting}
-          className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-        >
-          {isSubmitting ? 'Submitting...' : 'Submit'}
-        </button>
-      </div>
-      {isSubmitted && <p className="text-green-500 text-xs mt-1">Blog post submitted successfully!</p>}
-    </form>
+    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
+      <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">Create Your Blog Post</h1>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="relative">
+          <input
+            type="text"
+            name="title"
+            id="title"
+            value={formData.title}
+            onChange={handleChange}
+            placeholder="Enter your captivating title"
+            className="w-full py-3 px-4 border-b-2 border-gray-300 focus:border-indigo-500 transition-colors duration-300 outline-none text-xl font-semibold"
+          />
+          {errors.title && <p className="text-red-500 text-xs mt-1">{errors.title}</p>}
+        </div>
+        
+        <div className="relative">
+          <textarea
+            name="content"
+            id="content"
+            rows="8"
+            value={formData.content}
+            onChange={handleChange}
+            placeholder="Share your thoughts..."
+            className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg focus:border-indigo-500 transition-colors duration-300 outline-none resize-none"
+          />
+          {errors.content && <p className="text-red-500 text-xs mt-1">{errors.content}</p>}
+        </div>
+        
+        <div className="flex space-x-4">
+          <div className="flex-1">
+            <input
+              type="text"
+              name="category"
+              id="category"
+              value={formData.category}
+              onChange={handleChange}
+              placeholder="Category"
+              className="w-full py-2 px-3 border-2 border-gray-300 rounded-md focus:border-indigo-500 transition-colors duration-300 outline-none"
+            />
+            {errors.category && <p className="text-red-500 text-xs mt-1">{errors.category}</p>}
+          </div>
+          <div className="flex-1">
+            <input
+              type="text"
+              name="image_url"
+              id="image_url"
+              value={formData.image_url}
+              onChange={handleChange}
+              placeholder="Image URL"
+              className="w-full py-2 px-3 border-2 border-gray-300 rounded-md focus:border-indigo-500 transition-colors duration-300 outline-none"
+            />
+            {errors.image_url && <p className="text-red-500 text-xs mt-1">{errors.image_url}</p>}
+          </div>
+        </div>
+        
+        <div className="text-center">
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105"
+          >
+            {isSubmitting ? 'Publishing...' : 'Publish Blog Post'}
+          </button>
+        </div>
+      </form>
+    </div>
   );
 }
