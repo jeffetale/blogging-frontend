@@ -9,6 +9,8 @@ import useSWR from "swr";
 
 import { useState } from "react";
 
+
+
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export function Overview({ setSelectedCategory }) {
@@ -16,6 +18,8 @@ export function Overview({ setSelectedCategory }) {
     "http://127.0.0.1:8000/api/v1/blog_posts",
     fetcher
   );
+
+  const [selectedCategory, setCategory] = useState("");
 
   const {
     data: posts,
@@ -28,7 +32,7 @@ export function Overview({ setSelectedCategory }) {
 
   const uniqueCategories = new Set(data.map((post) => post.category));
 
-  const [selectedCategory, setCategory] = useState("");
+
   const handleCategoryClick = (category) => {
     setCategory(category);
     setSelectedCategory(category);

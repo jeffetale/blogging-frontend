@@ -4,6 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 async function getBlogPost(slug) {
   console.log(`Fetching blog post with slug: ${slug}`);
@@ -12,11 +13,26 @@ async function getBlogPost(slug) {
   return res.json();
 }
 
+async function checkOwnership(postId, token) {
+  console.log(`Checking ownership for post ID: ${postId}`);
+  const res = await fetch(`http://127.0.0.1:8000/api/v1/blog_posts/${postId}/is_owner`, {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  if (!res.ok) return false;
+  const data = await res.json();
+  console.log(`Ownership check result: ${data.is_owner}`);
+  return data.is_owner;
+}
+
 export default function BlogPost() {
   const { slug } = useParams();
   const [post, setPost] = useState(null);
+  const [isOwner, setIsOwner] = useState(false);
   const [error, setError] = useState(null);
   const [viewUpdated, setViewUpdated] = useState(false);
+  const { loggedIn, getAccessToken } = useAuth(); // Add getAccessToken here
 
   useEffect(() => {
     console.log(`useEffect triggered with slug: ${slug}`);
@@ -36,10 +52,20 @@ export default function BlogPost() {
                 method: 'POST',
               });
               setViewUpdated(true);
+
+              if (loggedIn) {
+                console.log(`User is logged in, checking ownership for post ID: ${data.id}`);
+                const token = getAccessToken(); // Get token from AuthContext
+                const ownerStatus = await checkOwnership(data.id, token);
+                setIsOwner(ownerStatus);
+              } else {
+                console.log('User is not logged in, skipping ownership check');
+              }
             }
           }
         } catch (error) {
           if (!didCancel) {
+            console.error('Error fetching blog post:', error);
             setError('Failed to load blog post');
           }
         }
@@ -50,7 +76,7 @@ export default function BlogPost() {
     return () => {
       didCancel = true;
     };
-  }, [slug, viewUpdated]);
+  }, [slug, viewUpdated, loggedIn, getAccessToken]);
 
   if (error) {
     return <div>{error}</div>;
@@ -71,6 +97,11 @@ export default function BlogPost() {
       />
       <h1>{post.title}</h1>
       <p>{post.content}</p>
+      {isOwner && (
+        <button className="mt-4 text-white bg-blue-500 hover:bg-blue-700 p-2 rounded">
+          Edit Post
+        </button>
+      )}
     </div>
   );
 }

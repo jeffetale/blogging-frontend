@@ -1,5 +1,4 @@
 // src/context/AuthContext.js
-
 'use client'
 
 import { createContext, useContext, useState } from 'react';
@@ -20,8 +19,12 @@ export const AuthProvider = ({ children }) => {
     setLoggedIn(false);
   };
 
+  const getAccessToken = () => {
+    return Cookies.get('access_token');
+  };
+
   return (
-    <AuthContext.Provider value={{ loggedIn, login, logout }}>
+    <AuthContext.Provider value={{ loggedIn, login, logout, getAccessToken }}>
       {children}
     </AuthContext.Provider>
   );
