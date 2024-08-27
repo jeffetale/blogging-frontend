@@ -7,18 +7,6 @@ import useSWR from "swr";
 
 import { useRouter } from "next/router";
 
-export default function BlogPost() {
-  const router = useRouter()
-  const { slug } = router.query
-
-  return (
-    <div>
-      <h1>Blog Post: {slug}</h1>
-      {/* Add your blog post content here */}
-    </div>
-  )
-}
-
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export function Content({ searchTerm = "", selectedCategory = "" }) {
@@ -55,7 +43,7 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
             <p className="text-muted-foreground mb-4">{post.content}</p>
             <Link
               href={`/blog/${post.id}`}
-              className="inline-flex items-center gap-2 text-primary hover:underline"
+              className="inline-flex items-center gap-2 text-primary hover:underline text-red "
             >
               Read more
               <ArrowRightIcon className="w-4 h-4" />

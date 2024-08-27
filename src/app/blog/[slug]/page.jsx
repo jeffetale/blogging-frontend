@@ -198,13 +198,13 @@ export default function BlogPost() {
           />
           <button
             onClick={handleSave}
-            className="mr-2 text-white bg-green-500 hover:bg-green-700 p-2 rounded"
+            className="mr-2 text-white bg-green-500 hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105 p-2 rounded"
           >
             Save
           </button>
           <button
             onClick={handleCancel}
-            className="text-white bg-red-500 hover:bg-red-700 p-2 rounded"
+            className="text-white bg-gray-500 hover:bg-gray-600 transition duration-300 ease-in-out transform hover:scale-105 p-2 rounded"
           >
             Cancel
           </button>
@@ -217,13 +217,13 @@ export default function BlogPost() {
             <div>
               <button
                 onClick={handleEdit}
-                className="mt-4 text-white bg-blue-500 hover:bg-blue-700 p-2 rounded"
+                className="mt-4 mr-2 text-white bg-blue-500 hover:bg-blue-600 transition duration-300 ease-in-out transform hover:scale-105 p-2 rounded"
               >
                 Edit Post
               </button>
               <button
                 onClick={handleDeleteClick}
-                className="mt-4 text-white bg-red-500 hover:bg-red-700 p-2 rounded"
+                className="mt-4 text-white bg-red-500 hover:bg-red-600 transition duration-300 ease-in-out transform hover:scale-105 p-2 rounded"
               >
                 Delete Post
               </button>
@@ -250,14 +250,14 @@ export default function BlogPost() {
               <div className="items-center px-4 py-3">
                 <button
                   id="delete-btn"
-                  className="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-300 mb-3"
+                  className="px-4 py-2 bg-red-600 text-white text-base font-medium rounded-md w-full shadow-sm hover:bg-red-700 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-300 mb-3"
                   onClick={handleDeleteConfirm}
                 >
                   Delete
                 </button>
                 <button
                   id="cancel-btn"
-                  className="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-400"
+                  className="px-4 py-2 bg-gray-200 text-gray-800 text-base font-medium rounded-md w-full shadow-sm hover:bg-gray-300 transition duration-300 ease-in-out transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-400"
                   onClick={handleDeleteCancel}
                 >
                   Cancel
