@@ -199,7 +199,7 @@ export default function BlogPost() {
 
       <div className="relative z-10 -mt-32 bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-4">{post.title}</h1>
-        <div className="flex flex-wrap items-center text-gray-600 mb-6 space-x-4">
+        <div className="flex flex-wrap items-center text-gray-600 mb-6 space-x-4 mt-4">
           <span className="flex items-center">
             <FaUser className="mr-2" /> {post.user?.username || "Anonymous"}
           </span>
@@ -232,16 +232,34 @@ export default function BlogPost() {
               onEditorChange={(content) => setEditedContent(content)}
               init={{
                 height: 500,
-                menubar: false,
+                menubar: true,
                 plugins: [
                   "advlist autolink lists link image charmap print preview anchor",
                   "searchreplace visualblocks code fullscreen",
                   "insertdatetime media table paste code help wordcount",
+                  "codesample",
                 ],
                 toolbar:
                   "undo redo | formatselect | bold italic backcolor | \
                   alignleft aligncenter alignright alignjustify | \
-                  bullist numlist outdent indent | removeformat | code | help",
+                  bullist numlist outdent indent | removeformat | code codesample | help",
+                codesample_languages: [
+                  { text: "HTML/XML", value: "markup" },
+                  { text: "JavaScript", value: "javascript" },
+                  { text: "CSS", value: "css" },
+                  { text: "PHP", value: "php" },
+                  { text: "Ruby", value: "ruby" },
+                  { text: "Python", value: "python" },
+                  { text: "Java", value: "java" },
+                  { text: "C", value: "c" },
+                  { text: "C#", value: "csharp" },
+                  { text: "C++", value: "cpp" },
+                ],
+                content_style: `
+                  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.4; }
+                  pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
+                  code { font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; }
+                `,
               }}
             />
             <div className="flex justify-end space-x-4 mt-4">
