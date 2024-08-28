@@ -4,6 +4,7 @@
 
 import Link from "next/link";
 import useSWR from "swr";
+import { HTMLContentRenderer } from "./HTMLContentRenderer";
 
 import { useRouter } from "next/router";
 
@@ -19,8 +20,12 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
   if (isLoading) return <div>Loading...</div>;
 
   const filteredPosts = data.filter((post) => {
-    const matchesSearchTerm = post.title.toLowerCase().includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory ? post.category === selectedCategory : true;
+    const matchesSearchTerm = post.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory
+      ? post.category === selectedCategory
+      : true;
     return matchesSearchTerm && matchesCategory;
   });
 
@@ -40,7 +45,9 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
           />
           <div className="p-6">
             <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-            <p className="text-muted-foreground mb-4">{post.content}</p>
+            <p className="text-muted-foreground mb-4">
+              <HTMLContentRenderer content={post.content} />
+            </p>
             <Link
               href={`/blog/${post.id}`}
               className="inline-flex items-center gap-2 text-primary hover:underline text-red "

@@ -103,17 +103,17 @@ export function BlogForm() {
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
             init={{
               height: 500,
-              menubar: false,
+              menubar: true,
               plugins: [
                 "advlist autolink lists link image charmap print preview anchor",
                 "searchreplace visualblocks code fullscreen",
                 "insertdatetime media table paste code help wordcount",
-                "codesample"
+                "codesample", // Add this plugin
               ],
               toolbar:
                 "undo redo | formatselect | bold italic backcolor | \
-                alignleft aligncenter alignright alignjustify | \
-                bullist numlist outdent indent | removeformat | code | help",
+                  alignleft aligncenter alignright alignjustify | \
+                  bullist numlist outdent indent | removeformat | code codesample | help",
               codesample_languages: [
                 { text: "HTML/XML", value: "markup" },
                 { text: "JavaScript", value: "javascript" },
@@ -126,6 +126,11 @@ export function BlogForm() {
                 { text: "C#", value: "csharp" },
                 { text: "C++", value: "cpp" },
               ],
+              content_style: `
+                  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.4; }
+                  pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
+                  code { font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; }
+                `,
             }}
             onEditorChange={handleEditorChange}
           />
