@@ -1,13 +1,13 @@
-"use client";
-
-import { useState } from "react";
-import Cookies from "js-cookie";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useAuth } from "@/context/AuthContext";
+import Cookies from "js-cookie";
+import { Editor } from "@tinymce/tinymce-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
-export function BlogForm(token) {
+export function BlogForm() {
   const [formData, setFormData] = useState({
     title: "",
+    subtitle: "",
     content: "",
     category: "",
     image_url: "",
@@ -18,6 +18,10 @@ export function BlogForm(token) {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleEditorChange = (content, editor) => {
+    setFormData({ ...formData, content });
   };
 
   const validate = () => {
@@ -76,22 +80,59 @@ export function BlogForm(token) {
             className="w-full py-3 px-4 border-b-2 border-gray-300 focus:border-indigo-500 transition-colors duration-300 outline-none text-xl font-semibold"
           />
           {errors.title && (
-            <p className="text-red-500 text-xs mt-1">{errors.title}</p>
+            <Alert variant="destructive" className="mt-2">
+              <AlertDescription>{errors.title}</AlertDescription>
+            </Alert>
           )}
         </div>
 
         <div className="relative">
-          <textarea
-            name="content"
-            id="content"
-            rows="8"
-            value={formData.content}
+          <input
+            type="text"
+            name="subtitle"
+            id="subtitle"
+            value={formData.subtitle}
             onChange={handleChange}
-            placeholder="Share your thoughts..."
-            className="w-full py-3 px-4 border-2 border-gray-300 rounded-lg focus:border-indigo-500 transition-colors duration-300 outline-none resize-none"
+            placeholder="Add a subtitle (optional)"
+            className="w-full py-2 px-4 border-b-2 border-gray-300 focus:border-indigo-500 transition-colors duration-300 outline-none text-lg"
+          />
+        </div>
+
+        <div className="relative">
+          <Editor
+            apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
+            init={{
+              height: 500,
+              menubar: false,
+              plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table paste code help wordcount",
+                "codesample"
+              ],
+              toolbar:
+                "undo redo | formatselect | bold italic backcolor | \
+                alignleft aligncenter alignright alignjustify | \
+                bullist numlist outdent indent | removeformat | code | help",
+              codesample_languages: [
+                { text: "HTML/XML", value: "markup" },
+                { text: "JavaScript", value: "javascript" },
+                { text: "CSS", value: "css" },
+                { text: "PHP", value: "php" },
+                { text: "Ruby", value: "ruby" },
+                { text: "Python", value: "python" },
+                { text: "Java", value: "java" },
+                { text: "C", value: "c" },
+                { text: "C#", value: "csharp" },
+                { text: "C++", value: "cpp" },
+              ],
+            }}
+            onEditorChange={handleEditorChange}
           />
           {errors.content && (
-            <p className="text-red-500 text-xs mt-1">{errors.content}</p>
+            <Alert variant="destructive" className="mt-2">
+              <AlertDescription>{errors.content}</AlertDescription>
+            </Alert>
           )}
         </div>
 
@@ -107,7 +148,9 @@ export function BlogForm(token) {
               className="w-full py-2 px-3 border-2 border-gray-300 rounded-md focus:border-indigo-500 transition-colors duration-300 outline-none"
             />
             {errors.category && (
-              <p className="text-red-500 text-xs mt-1">{errors.category}</p>
+              <Alert variant="destructive" className="mt-2">
+                <AlertDescription>{errors.category}</AlertDescription>
+              </Alert>
             )}
           </div>
           <div className="flex-1">
@@ -121,7 +164,9 @@ export function BlogForm(token) {
               className="w-full py-2 px-3 border-2 border-gray-300 rounded-md focus:border-indigo-500 transition-colors duration-300 outline-none"
             />
             {errors.image_url && (
-              <p className="text-red-500 text-xs mt-1">{errors.image_url}</p>
+              <Alert variant="destructive" className="mt-2">
+                <AlertDescription>{errors.image_url}</AlertDescription>
+              </Alert>
             )}
           </div>
         </div>

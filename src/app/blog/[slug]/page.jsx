@@ -7,6 +7,8 @@ import { useParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
 import { FaEdit, FaTrash, FaClock, FaUser, FaEye } from "react-icons/fa";
+import { HTMLContentRenderer } from "@/components/HTMLContentRenderer";
+import { Editor } from "@tinymce/tinymce-react";
 
 async function getBlogPost(slug) {
   console.log(`Fetching blog post with slug: ${slug}`);
@@ -224,12 +226,25 @@ export default function BlogPost() {
               onChange={(e) => setEditedTitle(e.target.value)}
               className="w-full p-2 mb-4 text-2xl font-bold border-b-2 border-gray-300 focus:border-blue-500 outline-none"
             />
-            <textarea
+            <Editor
+              apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
               value={editedContent}
-              onChange={(e) => setEditedContent(e.target.value)}
-              className="w-full p-2 mb-4 min-h-[300px] border-2 border-gray-300 rounded focus:border-blue-500 outline-none"
+              onEditorChange={(content) => setEditedContent(content)}
+              init={{
+                height: 500,
+                menubar: false,
+                plugins: [
+                  "advlist autolink lists link image charmap print preview anchor",
+                  "searchreplace visualblocks code fullscreen",
+                  "insertdatetime media table paste code help wordcount",
+                ],
+                toolbar:
+                  "undo redo | formatselect | bold italic backcolor | \
+                  alignleft aligncenter alignright alignjustify | \
+                  bullist numlist outdent indent | removeformat | code | help",
+              }}
             />
-            <div className="flex justify-end space-x-4">
+            <div className="flex justify-end space-x-4 mt-4">
               <button
                 onClick={handleSave}
                 className="px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105"
@@ -247,11 +262,7 @@ export default function BlogPost() {
         ) : (
           <div className="mt-8">
             <div className="prose prose-lg max-w-none">
-              {post.content.split("\n").map((paragraph, index) => (
-                <p key={index} className="mb-4">
-                  {paragraph}
-                </p>
-              ))}
+              <HTMLContentRenderer content={post.content} />
             </div>
             {isOwner && (
               <div className="mt-8 flex justify-end space-x-4">
