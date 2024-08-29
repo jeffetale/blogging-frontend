@@ -31,12 +31,13 @@ export function Contact(params) {
     };
 
     const handleSubmit = async (e) => {
+        const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
         e.preventDefault();
         const validationErrors = validate();
         if (Object.keys(validationErrors).length === 0) {
             setIsSubmitting(true);
             try {
-              const response = await fetch('http://127.0.0.1:8000/api/v1/contact', {
+              const response = await fetch(`${backendBaseURL}/api/v1/contact`, {
                 method: 'POST',
           headers: {
             'Content-Type': 'application/json',

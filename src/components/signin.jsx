@@ -38,9 +38,11 @@ export function Signin() {
   const [password, setPassword] = useState("");
   const router = useRouter();
   const { login } = useAuth();
+  const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
 
   const { trigger, error, isMutating } = useSWRMutation(
-    "http://127.0.0.1:8000/api/v1/token",
+    `${backendBaseURL}/api/v1/token`,
     loginFetcher
   );
 

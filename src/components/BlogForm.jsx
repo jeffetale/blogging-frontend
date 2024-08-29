@@ -40,6 +40,7 @@ export function BlogForm() {
   };
 
   const handleSubmit = async (e) => {
+    const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
     e.preventDefault();
     const validationErrors = validate();
     if (Object.keys(validationErrors).length === 0) {
@@ -53,7 +54,7 @@ export function BlogForm() {
         formDataToSend.append("image", image);
 
         const response = await fetch(
-          "http://127.0.0.1:8000/api/v1/blog_posts",
+          `${backendBaseURL}/api/v1/blog_posts`,
           {
             method: "POST",
             headers: {

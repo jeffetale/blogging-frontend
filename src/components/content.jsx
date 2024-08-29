@@ -10,9 +10,11 @@ import { useRouter } from "next/router";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
+
 export function Content({ searchTerm = "", selectedCategory = "" }) {
+  const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { data, error, isLoading } = useSWR(
-    "http://127.0.0.1:8000/api/v1/blog_posts",
+    `${backendBaseURL}/api/v1/blog_posts`,
     fetcher
   );
   console.log("Fetched data:", data);
@@ -30,7 +32,6 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
     return matchesSearchTerm && matchesCategory;
   });
 
-  const BACKEND_BASE_URL = "http://127.0.0.1:8000";
 
   return (
     <div className="space-y-8">
@@ -40,7 +41,7 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
           className="bg-background rounded-md shadow-sm overflow-hidden"
         >
           <img
-            src={`${BACKEND_BASE_URL}${post.image_url_medium}`}
+            src={`${backendBaseURL}${post.image_url_medium}`}
             width={800}
             height={400}
             alt="Blog post image"

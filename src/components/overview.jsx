@@ -8,14 +8,16 @@ import Link from "next/link";
 import useSWR from "swr";
 
 import { useState } from "react";
+import { HTMLContentRenderer } from "./HTMLContentRenderer";
 
 
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export function Overview({ setSelectedCategory }) {
+  const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { data, error, isLoading } = useSWR(
-    "http://127.0.0.1:8000/api/v1/blog_posts",
+    `${backendBaseURL}/api/v1/popular_posts`,
     fetcher
   );
 
@@ -25,7 +27,7 @@ export function Overview({ setSelectedCategory }) {
     data: posts,
     error: postsError,
     isLoading: postsLoading,
-  } = useSWR("http://127.0.0.1:8000/api/v1/popular_posts", fetcher);
+  } = useSWR(`${backendBaseURL}/api/v1/blog_posts`, fetcher);
 
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
@@ -112,7 +114,7 @@ export function Overview({ setSelectedCategory }) {
                     className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
                   >
                     <img
-                      src={post.image_url}
+                      src={`${backendBaseURL}${post.image_url_small}`}
                       width={80}
                       height={80}
                       alt="Popular post image"
@@ -121,7 +123,7 @@ export function Overview({ setSelectedCategory }) {
                     <div>
                       <h4 className="text-lg font-semibold">{post.title}</h4>
                       <p className="text-sm text-muted-foreground">
-                        {post.content}
+                        <HTMLContentRenderer content={post.content} />
                       </p>
                     </div>
                   </Link>

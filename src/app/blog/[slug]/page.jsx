@@ -10,9 +10,11 @@ import { FaEdit, FaTrash, FaClock, FaUser, FaEye } from "react-icons/fa";
 import { HTMLContentRenderer } from "@/components/HTMLContentRenderer";
 import { Editor } from "@tinymce/tinymce-react";
 
+const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL; 
+
 async function getBlogPost(slug) {
   console.log(`Fetching blog post with slug: ${slug}`);
-  const res = await fetch(`http://127.0.0.1:8000/api/v1/blog_posts/${slug}`);
+  const res = await fetch(`${backendBaseURL}/api/v1/blog_posts/${slug}`);
   if (!res.ok) return undefined;
   return res.json();
 }
@@ -20,7 +22,7 @@ async function getBlogPost(slug) {
 async function checkOwnership(postId, token) {
   console.log(`Checking ownership for post ID: ${postId}`);
   const res = await fetch(
-    `http://127.0.0.1:8000/api/v1/blog_posts/${postId}/is_owner`,
+    `${backendBaseURL}/api/v1/blog_posts/${postId}/is_owner`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -35,7 +37,7 @@ async function checkOwnership(postId, token) {
 
 async function updateBlogPost(postId, token, updatedData) {
   const res = await fetch(
-    `http://127.0.0.1:8000/api/v1/blog_posts/${postId}/`,
+    `${backendBaseURL}/api/v1/blog_posts/${postId}/`,
     {
       method: "PUT",
       headers: {
@@ -51,7 +53,7 @@ async function updateBlogPost(postId, token, updatedData) {
 
 async function deleteBlogPost(postId, token) {
   const res = await fetch(
-    `http://127.0.0.1:8000/api/v1/blog_posts/${postId}/`,
+    `${backendBaseURL}/api/v1/blog_posts/${postId}/`,
     {
       method: "DELETE",
       headers: {
@@ -90,7 +92,7 @@ export default function BlogPost() {
               setPost(data);
               console.log(`Updating view count for slug: ${slug}`);
               await fetch(
-                `http://127.0.0.1:8000/api/v1/blog_posts/${slug}/update_view_count/`,
+                `${backendBaseURL}/api/v1/blog_posts/${slug}/update_view_count/`,
                 {
                   method: "POST",
                 }
@@ -101,7 +103,7 @@ export default function BlogPost() {
                 console.log(
                   `User is logged in, checking ownership for post ID: ${data.id}`
                 );
-                const token = getAccessToken(); // Get token from AuthContext
+                const token = getAccessToken();
                 const ownerStatus = await checkOwnership(data.id, token);
                 setIsOwner(ownerStatus);
               } else {
@@ -190,9 +192,9 @@ export default function BlogPost() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="relative mb-16 pb-8">
         <img
-          src={post.image_url_small}
+          src={`${backendBaseURL}${post.image_url_medium}`}
           alt="Blog post cover"
-          className="w-full h-96 object-scale-down rounded-lg shadow-lg"
+          className="w-full h-96 object-none rounded-lg shadow-lg"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black/70"></div>
       </div>
