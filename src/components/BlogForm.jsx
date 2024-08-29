@@ -99,7 +99,7 @@ export function BlogForm() {
           )}
         </div>
 
-        <div className="relative">
+        {/* <div className="relative">
           <input
             type="text"
             name="subtitle"
@@ -109,7 +109,7 @@ export function BlogForm() {
             placeholder="Add a subtitle (optional)"
             className="w-full py-2 px-4 border-b-2 border-gray-300 focus:border-indigo-500 transition-colors duration-300 outline-none text-lg"
           />
-        </div>
+        </div> */}
 
         <div className="relative">
           <Editor
@@ -121,12 +121,14 @@ export function BlogForm() {
                 "advlist autolink lists link image charmap print preview anchor",
                 "searchreplace visualblocks code fullscreen",
                 "insertdatetime media table paste code help wordcount",
-                "codesample", // Add this plugin
+                "codesample",
+                "lists",
+                "lists advlist",
               ],
               toolbar:
                 "undo redo | formatselect | bold italic backcolor | \
                   alignleft aligncenter alignright alignjustify | \
-                  bullist numlist outdent indent | removeformat | code codesample | help",
+                  bullist numlist outdent indent | removeformat | code codesample | help | bullist numlist",
               codesample_languages: [
                 { text: "HTML/XML", value: "markup" },
                 { text: "JavaScript", value: "javascript" },
@@ -138,6 +140,9 @@ export function BlogForm() {
                 { text: "C", value: "c" },
                 { text: "C#", value: "csharp" },
                 { text: "C++", value: "cpp" },
+                { text: "SQL", value: "sql" },
+                { text: "XML", value: "xml" },
+                { text: "JSON", value: "json" },
               ],
               content_style: `
                   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.4; }

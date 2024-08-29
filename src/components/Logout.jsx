@@ -1,3 +1,5 @@
+// src/components/Logout.jsx
+
 "use client";
 
 import { useRouter } from "next/navigation";

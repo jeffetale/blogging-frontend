@@ -10,7 +10,7 @@ export const AuthProvider = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(!!Cookies.get('access_token'));
 
   const login = (token) => {
-    Cookies.set('access_token', token, { expires: 1 });
+    Cookies.set('access_token', token, { expires: 30 });
     setLoggedIn(true);
   };
 

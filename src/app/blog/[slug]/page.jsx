@@ -240,11 +240,14 @@ export default function BlogPost() {
                   "searchreplace visualblocks code fullscreen",
                   "insertdatetime media table paste code help wordcount",
                   "codesample",
+                  "lists",
+                  "lists advlist",
+                  "fullscreen",
                 ],
                 toolbar:
                   "undo redo | formatselect | bold italic backcolor | \
                   alignleft aligncenter alignright alignjustify | \
-                  bullist numlist outdent indent | removeformat | code codesample | help",
+                  bullist numlist outdent indent | removeformat | code codesample | help | bullist numlist | fullscreen",
                 codesample_languages: [
                   { text: "HTML/XML", value: "markup" },
                   { text: "JavaScript", value: "javascript" },
