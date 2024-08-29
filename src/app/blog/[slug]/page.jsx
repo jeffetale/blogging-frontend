@@ -190,7 +190,7 @@ export default function BlogPost() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="relative mb-16 pb-8">
         <img
-          src={post.image_url}
+          src={post.image_url_small}
           alt="Blog post cover"
           className="w-full h-96 object-scale-down rounded-lg shadow-lg"
         />

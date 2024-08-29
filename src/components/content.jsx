@@ -15,6 +15,7 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
     "http://127.0.0.1:8000/api/v1/blog_posts",
     fetcher
   );
+  console.log("Fetched data:", data);
 
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
@@ -29,6 +30,8 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
     return matchesSearchTerm && matchesCategory;
   });
 
+  const BACKEND_BASE_URL = "http://127.0.0.1:8000";
+
   return (
     <div className="space-y-8">
       {filteredPosts.map((post) => (
@@ -37,7 +40,7 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
           className="bg-background rounded-md shadow-sm overflow-hidden"
         >
           <img
-            src={post.image_url}
+            src={`${BACKEND_BASE_URL}${post.image_url_medium}`}
             width={800}
             height={400}
             alt="Blog post image"
