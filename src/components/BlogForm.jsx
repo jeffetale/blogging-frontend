@@ -12,8 +12,8 @@ export function BlogForm() {
     subtitle: "",
     content: "",
     category: "",
-    image_url: "",
   });
+  const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
@@ -26,12 +26,16 @@ export function BlogForm() {
     setFormData({ ...formData, content });
   };
 
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
+
   const validate = () => {
     let tempErrors = {};
     if (!formData.title) tempErrors.title = "Title is required.";
     if (!formData.content) tempErrors.content = "Content is required.";
     if (!formData.category) tempErrors.category = "Category is required.";
-    if (!formData.image_url) tempErrors.image_url = "Image URL is required.";
+    if (!image) tempErrors.image = "Image is required.";
     return tempErrors;
   };
 
@@ -42,15 +46,21 @@ export function BlogForm() {
       setIsSubmitting(true);
       try {
         const token = Cookies.get("access_token");
+        const formDataToSend = new FormData();
+        for (const key in formData) {
+          formDataToSend.append(key, formData[key]);
+        }
+        formDataToSend.append("image", image);
+
         const response = await fetch(
           "http://127.0.0.1:8000/api/v1/blog_posts",
           {
             method: "POST",
             headers: {
-              "Content-Type": "application/json",
+             
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify(formData),
+            body: formDataToSend,
           }
         );
         if (!response.ok) throw new Error("Network response was not ok");
@@ -162,17 +172,17 @@ export function BlogForm() {
           </div>
           <div className="flex-1">
             <input
-              type="text"
-              name="image_url"
-              id="image_url"
-              value={formData.image_url}
-              onChange={handleChange}
-              placeholder="Image URL"
+              type="file"
+              name="image"
+              id="image"
+              value={formData.image}
+              onChange={handleImageChange}
+              accept="image/*"
               className="w-full py-2 px-3 border-2 border-gray-300 rounded-md focus:border-indigo-500 transition-colors duration-300 outline-none"
             />
-            {errors.image_url && (
+            {errors.image && (
               <Alert variant="destructive" className="mt-2">
-                <AlertDescription>{errors.image_url}</AlertDescription>
+                <AlertDescription>{errors.image}</AlertDescription>
               </Alert>
             )}
           </div>
