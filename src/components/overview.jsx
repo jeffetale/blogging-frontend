@@ -17,7 +17,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export function Overview({ setSelectedCategory }) {
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { data, error, isLoading } = useSWR(
-    `${backendBaseURL}/api/v1/popular_posts`,
+    `${backendBaseURL}/api/v1/blog_posts`,
     fetcher
   );
 
@@ -27,7 +27,7 @@ export function Overview({ setSelectedCategory }) {
     data: posts,
     error: postsError,
     isLoading: postsLoading,
-  } = useSWR(`${backendBaseURL}/api/v1/blog_posts`, fetcher);
+  } = useSWR(`${backendBaseURL}/api/v1/popular_posts`, fetcher);
 
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
