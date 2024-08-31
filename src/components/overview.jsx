@@ -123,7 +123,7 @@ export function Overview({ setSelectedCategory }) {
                     <div>
                       <h4 className="text-lg font-semibold">{post.title}</h4>
                       <p className="text-sm text-muted-foreground">
-                        <HTMLContentRenderer content={post.content} />
+                        <HTMLContentRenderer content={post.short_summary} />
                       </p>
                     </div>
                   </Link>

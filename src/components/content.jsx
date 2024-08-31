@@ -14,7 +14,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export function Content({ searchTerm = "", selectedCategory = "" }) {
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { data, error, isLoading } = useSWR(
-    `${backendBaseURL}/api/v1/blog_posts/summaries`,
+    `${backendBaseURL}/api/v1/blog_posts`,
     fetcher
   );
   console.log("Fetched data:", data);
