@@ -14,7 +14,7 @@ const fetcher = (url) => fetch(url).then((res) => res.json());
 export function Content({ searchTerm = "", selectedCategory = "" }) {
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { data, error, isLoading } = useSWR(
-    `${backendBaseURL}/api/v1/blog_posts`,
+    `${backendBaseURL}/api/v1/blog_posts/summaries`,
     fetcher
   );
   console.log("Fetched data:", data);
@@ -50,7 +50,7 @@ export function Content({ searchTerm = "", selectedCategory = "" }) {
           <div className="p-6">
             <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
             <p className="text-muted-foreground mb-4">
-              <HTMLContentRenderer content={post.content} />
+              <HTMLContentRenderer content={post.summary} />
             </p>
             <Link
               href={`/blog/${post.id}`}
