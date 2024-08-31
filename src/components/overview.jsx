@@ -1,136 +1,138 @@
-import { Card, CardContent, CardHeader } from "./ui/card"
-import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar"
-import Link from "next/link"
+// src/components/overview.jsx
 
-export function Overview() {
-    return (
-        <div>
-    <Card>
-            <CardHeader>
-              <div className="flex items-center gap-4">
-                <Avatar className="w-12 h-12">
-                  <AvatarImage src="/placeholder-user.jpg" />
-                  <AvatarFallback>JD</AvatarFallback>
-                </Avatar>
-                <div>
-                  <h3 className="text-lg font-semibold">John Doe</h3>
-                  <p className="text-muted-foreground">Founder, Blog Inc.</p>
-                </div>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <p className="text-muted-foreground">
-                Welcome to my blog! I'm a passionate web developer and designer, sharing my insights and experiences on
-                the latest trends and technologies in the industry.
-              </p>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <h3 className="text-lg font-semibold">Categories</h3>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-2">
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-                    Web Development
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-                    Design
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-                    Technology
-                  </Link>
-                </li>
-                <li>
-                  <Link href="#" className="text-muted-foreground hover:text-foreground" prefetch={false}>
-                    Productivity
-                  </Link>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
-          <Card>
-            <CardHeader>
-              <h3 className="text-lg font-semibold">Popular Posts</h3>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-4">
-                <li>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-                    prefetch={false}
-                  >
-                    <img
-                      src="/placeholder.svg"
-                      width={80}
-                      height={80}
-                      alt="Popular post image"
-                      className="rounded-md"
-                    />
-                    <div>
-                      <h4 className="text-lg font-semibold">Mastering React Hooks: A Comprehensive Guide</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Dive deep into the world of React Hooks and learn how to leverage them to build more efficient
-                        and maintainable applications.
-                      </p>
-                    </div>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-                    prefetch={false}
-                  >
-                    <img
-                      src="/placeholder.svg"
-                      width={80}
-                      height={80}
-                      alt="Popular post image"
-                      className="rounded-md"
-                    />
-                    <div>
-                      <h4 className="text-lg font-semibold">
-                        Designing for Accessibility: Best Practices and Techniques
-                      </h4>
-                      <p className="text-sm text-muted-foreground">
-                        Learn how to create inclusive and accessible web experiences that cater to users with diverse
-                        needs and abilities.
-                      </p>
-                    </div>
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="#"
-                    className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-                    prefetch={false}
-                  >
-                    <img
-                      src="/placeholder.svg"
-                      width={80}
-                      height={80}
-                      alt="Popular post image"
-                      className="rounded-md"
-                    />
-                    <div>
-                      <h4 className="text-lg font-semibold">The Future of Web Development: Trends and Insights</h4>
-                      <p className="text-sm text-muted-foreground">
-                        Explore the latest trends and technologies shaping the future of web development, from
-                        AI-powered tools to the rise of serverless architecture.
-                      </p>
-                    </div>
-                  </Link>
-                </li>
-              </ul>
-            </CardContent>
-          </Card>
+"use client";
+
+import { Card, CardContent, CardHeader } from "./ui/card";
+import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
+import Link from "next/link";
+import useSWR from "swr";
+
+import { useState } from "react";
+import { HTMLContentRenderer } from "./HTMLContentRenderer";
+
+
+
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export function Overview({ setSelectedCategory }) {
+  const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+  const { data, error, isLoading } = useSWR(
+    `${backendBaseURL}/api/v1/blog_posts`,
+    fetcher
+  );
+
+  const [selectedCategory, setCategory] = useState("");
+
+  const {
+    data: posts,
+    error: postsError,
+    isLoading: postsLoading,
+  } = useSWR(`${backendBaseURL}/api/v1/popular_posts`, fetcher);
+
+  if (error) return <div>Failed to Load</div>;
+  if (isLoading) return <div>Loading...</div>;
+
+  const uniqueCategories = new Set(data.map((post) => post.category));
+
+
+  const handleCategoryClick = (category) => {
+    setCategory(category);
+    setSelectedCategory(category);
+  };
+
+  return (
+    <div>
+      <Card>
+        <CardHeader>
+          <div className="flex items-center gap-4">
+            <Avatar className="w-12 h-12">
+              <AvatarImage src="/placeholder-user.jpg" />
+              <AvatarFallback>JD</AvatarFallback>
+            </Avatar>
+            <div>
+              <h3 className="text-lg font-semibold">Jeff Etale</h3>
+              <p className="text-muted-foreground">Founder, Blog Inc.</p>
+            </div>
           </div>
-    )
+        </CardHeader>
+        <CardContent>
+          <p className="text-muted-foreground">
+            Welcome to my blog! I'm a passionate web developer, designer and
+            ethical hacker, sharing my insights and experiences on the latest
+            trends and technologies in the industry.
+          </p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <h3 className="text-lg font-semibold">Categories</h3>
+        </CardHeader>
+        <CardContent>
+          <ul className="space-y-2">
+            <li>
+              <Link
+                href="#"
+                className="text-muted-foreground hover:text-foreground font-extrabold font-weight:800 "
+                prefetch={false}
+                onClick={() => setSelectedCategory("")}
+              >
+                Show All
+              </Link>
+            </li>
+            {Array.from(uniqueCategories).map((category, index) => (
+              <li>
+                <Link
+                  href="#"
+                  className={`text-muted-foreground hover:text-foreground ${
+                    selectedCategory === category
+                      ? "text-foreground font-bold"
+                      : ""
+                  }`}
+                  prefetch={false}
+                  onClick={() => handleCategoryClick(category)}
+                >
+                  {category}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader>
+          <h3 className="text-lg font-semibold">Popular Posts</h3>
+        </CardHeader>
+        <CardContent>
+          {postsError && <div>Failed to load popular posts</div>}
+          {postsLoading && <div>Loading popular posts...</div>}
+          {posts && (
+            <ul className="space-y-4">
+              {posts.map((post) => (
+                <li key={post.id}>
+                  <Link
+                    href={`/blog/${post.id}`}
+                    className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
+                  >
+                    <img
+                      src={`${backendBaseURL}${post.image_url_small}`}
+                      width={80}
+                      height={80}
+                      alt="Popular post image"
+                      className="rounded-md"
+                    />
+                    <div>
+                      <h4 className="text-lg font-semibold">{post.title}</h4>
+                      <p className="text-sm text-muted-foreground">
+                        <HTMLContentRenderer content={post.short_summary} />
+                      </p>
+                    </div>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
 }
