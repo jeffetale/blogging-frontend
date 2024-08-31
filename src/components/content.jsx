@@ -33,7 +33,6 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
 
   useEffect(() => {
     if (data && data.length > 0) {
-      // Set the first post as featured or implement your own logic
       setFeaturedPost(data[0]);
     }
   }, [data]);
@@ -55,18 +54,6 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
 
   return (
     <div className="space-y-12">
-      {/* Hero Section */}
-      <section className="relative h-[70vh] bg-gradient-to-r from-primary to-secondary text-white flex items-center justify-center">
-        <div className="text-center space-y-4 z-10">
-          <h1 className="text-5xl font-bold">Welcome to Our Blog</h1>
-          <p className="text-xl">Discover amazing stories and insights</p>
-          <Button variant="secondary" size="lg">
-            Start Reading
-          </Button>
-        </div>
-        <div className="absolute inset-0 bg-black opacity-50"></div>
-      </section>
-
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Content */}
@@ -82,7 +69,7 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <img
-                      src={featuredPost.image_url_medium}
+                      src={`${backendBaseURL}${featuredPost.image_url_medium}`}
                       alt={featuredPost.title}
                       className="w-full h-64 object-cover rounded-l-lg"
                     />
@@ -129,7 +116,7 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                     transition={{ type: "spring", stiffness: 300 }}
                   >
                     <img
-                      src={post.image_url_medium}
+                      src={`${backendBaseURL}${post.image_url_large}`}
                       alt={post.title}
                       className="w-full h-48 object-cover"
                     />
@@ -160,9 +147,9 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
           </div>
 
           {/* Overview Section */}
-          <div className="lg:col-span-1">
+          {/* <div className="lg:col-span-1">
             <Overview setSelectedCategory={setSelectedCategory} />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
