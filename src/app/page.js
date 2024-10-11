@@ -26,7 +26,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative h-[70vh] bg-gradient-to-r from-primary to-secondary text-white flex items-center justify-center">
         <div className="text-center space-y-4 z-10">
-          <h1 className="text-5xl font-bold">Welcome to Our Blog</h1>
+          <h1 className="text-5xl font-bold">Welcome to My Blog</h1>
           <p className="text-xl">Discover amazing stories and insights</p>
           <Button variant="secondary" size="lg">
             Start Reading
@@ -36,8 +36,8 @@ export default function Home() {
       </section>
 
       {/* Main Content Area */}
-      <main className="flex-1 container mx-auto px-4 py-8 md:py-12 pe-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <main className="flex-1 container mx-auto px-4 py-6 md:py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Content Section (2/3 width on large screens) */}
           <div className="lg:col-span-2">
             <Content searchTerm={searchTerm} selectedCategory={selectedCategory} />
