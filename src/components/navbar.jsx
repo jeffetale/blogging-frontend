@@ -49,7 +49,7 @@ export function Navbar({ setSearchTerm }) {
           {loggedIn && <LogoutButton />}
         </nav>
         <div className="relative hidden md:block">
-          <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
+          {/* <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
             <SearchIcon className="w-4 h-4" />
           </div>
           <Input
@@ -57,7 +57,7 @@ export function Navbar({ setSearchTerm }) {
             placeholder="Search..."
             className="pl-8 pr-4 py-2 rounded-md bg-muted text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
             onChange={(e) => setSearchTerm(e.target.value)}
-          />
+          /> */}
         </div>
       </div>
     </header>
