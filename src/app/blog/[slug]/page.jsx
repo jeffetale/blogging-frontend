@@ -14,7 +14,7 @@ const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 async function getBlogPost(slug) {
   console.log(`Fetching blog post with slug: ${slug}`);
-  const res = await fetch(`${backendBaseURL}/api/v1/blog_posts/${slug}`);
+  const res = await fetch(`${backendBaseURL}/api/v1/blog_posts/slug/${slug}`);
   if (!res.ok) return undefined;
   return res.json();
 }
@@ -92,7 +92,7 @@ export default function BlogPost() {
               setPost(data);
               console.log(`Updating view count for slug: ${slug}`);
               await fetch(
-                `${backendBaseURL}/api/v1/blog_posts/${slug}/update_view_count/`,
+                `${backendBaseURL}/api/v1/blog_posts/slug/${slug}/update_view_count/`,
                 {
                   method: "POST",
                 }

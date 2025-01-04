@@ -10,12 +10,10 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Search, Clock, Tag } from "lucide-react";
-import { Overview } from "@/components/overview";
-import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 const AnimatedCard = motion(Card);
 const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -24,6 +22,7 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
   const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
   const [selectedCategory, setSelectedCategory] = useState(initialCategory);
   const [featuredPost, setFeaturedPost] = useState(null);
+  const router = useRouter();
 
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { data, error, isLoading } = useSWR(
@@ -52,6 +51,15 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
       })
     : [];
 
+  const handlePostClick = (slug) => {
+    if (!slug) {
+      console.error("Post slug is undefined:", slug);
+      return;
+    }
+    router.push(`/blog/${slug}`);
+  };
+
+
   return (
     <div className="space-y-12">
       <div className="container mx-auto px-4">
@@ -63,9 +71,10 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
               <section>
                 <h2 className="text-3xl font-bold mb-6">Featured Post</h2>
                 <AnimatedCard
-                  className="overflow-hidden"
+                  className="overflow-hidden cursor-pointer"
                   whileHover={{ scale: 1.02 }}
                   transition={{ type: "spring", stiffness: 300 }}
+                  onClick={() => handlePostClick(featuredPost.slug)}
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <img
@@ -111,9 +120,10 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                 {filteredPosts.map((post) => (
                   <AnimatedCard
                     key={post.id}
-                    className="overflow-hidden"
+                    className="overflow-hidden cursor-pointer"
                     whileHover={{ y: -5 }}
                     transition={{ type: "spring", stiffness: 300 }}
+                    onClick={() => handlePostClick(post.slug)}
                   >
                     <img
                       src={`${backendBaseURL}${post.image_url_large}`}
@@ -125,7 +135,7 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                     </CardHeader>
                     <CardContent>
                       <p className="text-muted-foreground">
-                        {post.summary.substring(0, 100)}...
+                        {post.summary?.substring(0, 100)}...
                       </p>
                     </CardContent>
                     <CardFooter className="flex justify-between items-center">
