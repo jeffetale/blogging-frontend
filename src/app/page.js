@@ -37,18 +37,17 @@ export default function Home() {
 
       {/* Main Content Area */}
       <main className="flex-1 container mx-auto px-4 py-6 md:py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Content Section (2/3 width on large screens) */}
-          <div className="lg:col-span-2">
-            <Content searchTerm={searchTerm} selectedCategory={selectedCategory} />
-          </div>
-
-          {/* Overview Section (1/3 width on large screens) */}
-          <div className="lg:col-span-1">
-            <Overview setSelectedCategory={setSelectedCategory} />
-          </div>
-        </div>
-      </main>
+  <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+    {/* Content Section (3/4 width on large screens) */}
+    <div className="lg:col-span-3">
+      <Content searchTerm={searchTerm} selectedCategory={selectedCategory} />
+    </div>
+    {/* Overview Section (1/4 width on large screens) */}
+    <div className="lg:col-span-1">
+      <Overview setSelectedCategory={setSelectedCategory} />
+    </div>
+  </div>
+</main>
     </div>
   );
 }
