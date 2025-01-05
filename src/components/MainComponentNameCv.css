@@ -1,0 +1,661 @@
+.main-component-name-cv,
+.main-component-name-cv * {
+  box-sizing: border-box;
+}
+.main-component-name-cv {
+  background: #f8f8f8;
+  height: 842px;
+  position: relative;
+  overflow: hidden;
+}
+.bg-1 {
+  position: absolute;
+  inset: 0;
+}
+.sun {
+  background: #f0e04b;
+  border-radius: 10000px;
+  width: 318px;
+  height: 318px;
+  position: absolute;
+  left: -159px;
+  top: 348px;
+}
+.grain {
+  width: 595px;
+  height: 842px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  mix-blend-mode: overlay;
+  object-fit: cover;
+}
+.grain2 {
+  width: 595px;
+  height: 842px;
+  position: absolute;
+  left: 595px;
+  top: 0px;
+  transform-origin: 0 0;
+  transform: rotate(0deg) scale(-1, 1);
+  mix-blend-mode: overlay;
+  object-fit: cover;
+}
+.blur {
+  background: rgba(196, 196, 196, 0.01);
+  width: 595px;
+  height: 842px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  backdrop-filter: blur(0.5px);
+}
+.blur2 {
+  background: rgba(196, 196, 196, 0.01);
+  width: 595px;
+  height: 842px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  backdrop-filter: blur(50px);
+}
+.name-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: absolute;
+  left: 213px;
+  top: 61px;
+}
+.text {
+  color: #000000;
+  text-align: left;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 40px;
+  line-height: 32px;
+  font-weight: 400;
+  position: relative;
+  width: 358px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+}
+.column-2-3 {
+  display: flex;
+  flex-direction: row;
+  gap: 20px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.column-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 33px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.experience {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.headline {
+  flex-shrink: 0;
+  width: 169px;
+  height: 16.2px;
+  position: static;
+}
+.separator {
+  background: #000000;
+  width: 169px;
+  height: 0.2px;
+  position: absolute;
+  left: 0px;
+  top: 16px;
+}
+.text2 {
+  color: #101010;
+  text-align: left;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 64.5%;
+  left: 0%;
+  width: 35.5%;
+  top: calc(50% - 247.1px);
+}
+.text3 {
+  color: #101010;
+  text-align: right;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 0%;
+  left: 89.94%;
+  width: 10.06%;
+  top: calc(50% - 247.1px);
+}
+.experience2 {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.text4 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 8px;
+  font-weight: 400;
+  position: relative;
+  width: 169px;
+}
+.text5 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Medium", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  position: relative;
+  width: 169px;
+}
+.text6 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: relative;
+  width: 169px;
+}
+.education {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.text7 {
+  color: #101010;
+  text-align: left;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 66.86%;
+  left: 0%;
+  width: 33.14%;
+  top: calc(50% - 39.6px);
+}
+.text8 {
+  color: #101010;
+  text-align: right;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 0%;
+  left: 89.94%;
+  width: 10.06%;
+  top: calc(50% - 39.6px);
+}
+.education2 {
+  flex-shrink: 0;
+  width: 169px;
+  height: 48px;
+  position: static;
+}
+.text9 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 8px;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 0%;
+  width: 100%;
+  top: calc(50% - 8.4px);
+}
+.text10 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Medium", sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  position: absolute;
+  right: 0%;
+  left: 0%;
+  width: 100%;
+  top: 50%;
+  translate: 0 -50%;
+}
+.text11 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 0%;
+  width: 100%;
+  top: calc(50% - -26.6px);
+}
+.column-3 {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.skills {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.text12 {
+  color: #101010;
+  text-align: left;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 79.29%;
+  left: 0%;
+  width: 20.71%;
+  top: calc(50% - 72.1px);
+}
+.text13 {
+  color: #101010;
+  text-align: right;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 0%;
+  left: 89.35%;
+  width: 10.65%;
+  top: calc(50% - 72.1px);
+}
+.skills2 {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.skills3 {
+  flex-shrink: 0;
+  width: 169px;
+  height: 13px;
+  position: static;
+}
+.text14 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 55.62%;
+  left: 0%;
+  width: 44.38%;
+  top: calc(50% - 56.5px);
+}
+.text15 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 56.21%;
+  width: 43.79%;
+  top: calc(50% - 56.5px);
+}
+.text16 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 55.62%;
+  left: 0%;
+  width: 44.38%;
+  top: calc(50% - 31.5px);
+}
+.text17 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 56.21%;
+  width: 43.79%;
+  top: calc(50% - 31.5px);
+}
+.text18 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 55.62%;
+  left: 0%;
+  width: 44.38%;
+  top: 50%;
+  translate: 0 -50%;
+}
+.text19 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 56.21%;
+  width: 43.79%;
+  top: 50%;
+  translate: 0 -50%;
+}
+.text20 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 55.62%;
+  left: 0%;
+  width: 44.38%;
+  top: calc(50% - -18.5px);
+}
+.text21 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 56.21%;
+  width: 43.79%;
+  top: calc(50% - -18.5px);
+}
+.text22 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 55.62%;
+  left: 0%;
+  width: 44.38%;
+  top: calc(50% - -43.5px);
+}
+.text23 {
+  color: #101010;
+  text-align: center;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 56.21%;
+  width: 43.79%;
+  top: calc(50% - -43.5px);
+}
+.languages {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.group-14 {
+  width: 169px;
+  height: 16.2px;
+  position: static;
+}
+.text24 {
+  color: #101010;
+  text-align: left;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 62.72%;
+  left: 0%;
+  width: 37.28%;
+  top: calc(50% - 47.1px);
+}
+.text25 {
+  color: #101010;
+  text-align: right;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 0%;
+  left: 89.94%;
+  width: 10.06%;
+  top: calc(50% - 47.1px);
+}
+.languages2 {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.language {
+  flex-shrink: 0;
+  width: 169px;
+  height: 13px;
+  position: static;
+}
+.group-15 {
+  width: 169px;
+  height: 13px;
+  position: static;
+}
+.text26 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 25.44%;
+  left: 0%;
+  width: 74.56%;
+  top: calc(50% - 31.5px);
+}
+.text27 {
+  color: #101010;
+  text-align: right;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 56.21%;
+  width: 43.79%;
+  top: calc(50% - 31.5px);
+}
+.group-16 {
+  width: 169px;
+  height: 13px;
+  position: static;
+}
+.text28 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 25.44%;
+  left: 0%;
+  width: 74.56%;
+  top: 50%;
+  translate: 0 -50%;
+}
+.text29 {
+  color: #101010;
+  text-align: right;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 56.21%;
+  width: 43.79%;
+  top: 50%;
+  translate: 0 -50%;
+}
+.text30 {
+  color: #101010;
+  text-align: left;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 25.44%;
+  left: 0%;
+  width: 74.56%;
+  top: calc(50% - -18.5px);
+}
+.text31 {
+  color: #101010;
+  text-align: right;
+  font-family: "Inter-Regular", sans-serif;
+  font-size: 9px;
+  line-height: 140.02%;
+  font-weight: 400;
+  position: absolute;
+  right: 0%;
+  left: 56.21%;
+  width: 43.79%;
+  top: calc(50% - -18.5px);
+}
+.column-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  position: absolute;
+  left: 24px;
+  top: 61px;
+}
+.text32 {
+  color: #101010;
+  text-align: left;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 68.05%;
+  left: 0%;
+  width: 31.95%;
+  top: calc(50% - 51.1px);
+}
+.text33 {
+  color: #101010;
+  text-align: right;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 9px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: absolute;
+  right: 0%;
+  left: 91.12%;
+  width: 8.88%;
+  top: calc(50% - 51.1px);
+}
+.contacts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: flex-start;
+  flex-shrink: 0;
+  position: relative;
+}
+.text34 {
+  color: #101010;
+  text-align: left;
+  font-family: "KonstantGrotesk-Book", sans-serif;
+  font-size: 8px;
+  font-weight: 400;
+  text-transform: uppercase;
+  position: relative;
+  width: 169px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
