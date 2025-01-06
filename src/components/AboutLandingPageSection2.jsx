@@ -34,7 +34,7 @@ export default function LandingPageSection2() {
           <Heading
             size="headings"
             as="h2"
-            className="sm:text-[24px] md:text-[26px] lg:text-[27px] leading-[48px] z-[4] text-[32px] tracking-[0.96px]"
+            className="sm:text-[24px] md:text-[26px] lg:text-[27px] leading-[48px] z-[4] text-[32px] tracking-[0.96px] mb-[290px] lg:w-[20%] w-[20%] relative self-end text-centre font-semibold text-black-900 md:w-full"
           >
             Full-Stack Development
           </Heading>
@@ -50,7 +50,7 @@ export default function LandingPageSection2() {
               <Text
                 size="texts"
                 as="p"
-                className="lg:text-[17px] leading-[31px] text-[21px] tracking-[0.63px] self-stretch text-black-900"
+                className="lg:text-[17px] leading-[31px] text-[21px] tracking-[0.63px] self-stretch text-centre font-normal text-black-900"
               >
                 From pixel-perfect interfaces to bulletproof security implementations, I bring a full spectrum of
                 digital expertise to the table. Whether you need a complete web overhaul or just want to make your
@@ -60,7 +60,7 @@ export default function LandingPageSection2() {
             <div className="gap-[30px] flex md:flex-col">
               <Suspense fallback={<div>Loading feed...</div>}>
                 {landingPageContent2.map((d, index) => (
-                  <UserProfile {...d} key={"landingP2" + index} className="w-[26%]" />
+                  <UserProfile {...d} key={"landingP" + index} className="w-[26%]" />
                 ))}
               </Suspense>
             </div>
