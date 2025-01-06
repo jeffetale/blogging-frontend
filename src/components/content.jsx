@@ -1,70 +1,171 @@
 // src/components/content.jsx
 
 "use client";
-
-import Link from "next/link";
 import useSWR from "swr";
-import { HTMLContentRenderer } from "./HTMLContentRenderer";
+import { motion } from "framer-motion";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { ArrowRight, Search, Clock, Tag } from "lucide-react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
-import { useRouter } from "next/router";
-
+const AnimatedCard = motion(Card);
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
+export function Content({ initialSearchTerm = "", initialCategory = "" }) {
+  const [searchTerm, setSearchTerm] = useState(initialSearchTerm);
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [featuredPost, setFeaturedPost] = useState(null);
+  const router = useRouter();
 
-export function Content({ searchTerm = "", selectedCategory = "" }) {
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const { data, error, isLoading } = useSWR(
     `${backendBaseURL}/api/v1/blog_posts`,
     fetcher
   );
-  console.log("Fetched data:", data);
+
+  useEffect(() => {
+    if (data && data.length > 0) {
+      setFeaturedPost(data[0]);
+    }
+  }, [data]);
 
   if (error) return <div>Failed to Load</div>;
   if (isLoading) return <div>Loading...</div>;
 
-  const filteredPosts = data.filter((post) => {
-    const matchesSearchTerm = post.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory
-      ? post.category === selectedCategory
-      : true;
-    return matchesSearchTerm && matchesCategory;
-  });
+  const filteredPosts = data
+    ? data.filter((post) => {
+        const matchesSearchTerm = post.title
+          .toLowerCase()
+          .includes(searchTerm.toLowerCase());
+        const matchesCategory = selectedCategory
+          ? post.category === selectedCategory
+          : true;
+        return matchesSearchTerm && matchesCategory;
+      })
+    : [];
+
+  const handlePostClick = (slug) => {
+    if (!slug) {
+      console.error("Post slug is undefined:", slug);
+      return;
+    }
+    router.push(`/blog/${slug}`);
+  };
 
 
   return (
-    <div className="space-y-8">
-      {filteredPosts.map((post) => (
-        <article
-          key={post.id}
-          className="bg-background rounded-md shadow-sm overflow-hidden"
-        >
-          <img
-            src={`${backendBaseURL}${post.image_url_medium}`}
-            width={800}
-            height={400}
-            alt="Blog post image"
-            className="w-full h-48 object-cover"
-          />
-          <div className="p-6">
-            <h2 className="text-2xl font-bold mb-2">{post.title}</h2>
-            <p className="text-muted-foreground mb-4">
-              <HTMLContentRenderer content={post.summary} />
-            </p>
-            <Link
-              href={`/blog/${post.id}`}
-              className="inline-flex items-center gap-2 text-primary hover:underline text-red "
-            >
-              Read more
-              <ArrowRightIcon className="w-4 h-4" />
-            </Link>
+    <div className="space-y-12">
+      <div className="container mx-auto px-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-12">
+            {/* Featured Post */}
+            {featuredPost && (
+              <section>
+                <h2 className="text-3xl font-bold mb-6">Featured Post</h2>
+                <AnimatedCard
+                  className="overflow-hidden cursor-pointer"
+                  whileHover={{ scale: 1.02 }}
+                  transition={{ type: "spring", stiffness: 300 }}
+                  onClick={() => handlePostClick(featuredPost.slug)}
+                >
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <img
+                      src={`${backendBaseURL}${featuredPost.image_url_medium}`}
+                      alt={featuredPost.title}
+                      className="w-full h-64 object-cover rounded-l-lg"
+                    />
+                    <div className="p-6 flex flex-col justify-between">
+                      <div>
+                        <h3 className="text-2xl font-bold mb-2">
+                          {featuredPost.title}
+                        </h3>
+                        <p className="text-muted-foreground mb-4">
+                          {featuredPost.summary}
+                        </p>
+                      </div>
+                      <Button className="self-start">
+                        Read More <ArrowRight className="ml-2 h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </AnimatedCard>
+              </section>
+            )}
+
+            {/* Search */}
+            <section>
+              <div className="relative w-full mb-8">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  type="search"
+                  placeholder="Search posts..."
+                  className="pl-10"
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                />
+              </div>
+            </section>
+
+            {/* Blog Posts Grid */}
+            <section>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                {filteredPosts.map((post) => (
+                  <AnimatedCard
+                    key={post.id}
+                    className="overflow-hidden cursor-pointer"
+                    whileHover={{ y: -5 }}
+                    transition={{ type: "spring", stiffness: 300 }}
+                    onClick={() => handlePostClick(post.slug)}
+                  >
+                    <img
+                      src={`${backendBaseURL}${post.image_url_large}`}
+                      alt={post.title}
+                      className="w-full h-48 object-cover"
+                    />
+                    <CardHeader>
+                      <h3 className="text-xl font-bold">{post.title}</h3>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-muted-foreground">
+                        {post.summary?.substring(0, 100)}...
+                      </p>
+                    </CardContent>
+                    <CardFooter className="flex justify-between items-center">
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Clock className="mr-1 h-4 w-4" />
+                        <span>
+                          {new Date(post.created_at).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <div className="flex items-center text-sm text-muted-foreground">
+                        <Tag className="mr-1 h-4 w-4" />
+                        <span>{post.category}</span>
+                      </div>
+                    </CardFooter>
+                  </AnimatedCard>
+                ))}
+              </div>
+            </section>
           </div>
-        </article>
-      ))}
+
+          {/* Overview Section */}
+          {/* <div className="lg:col-span-1">
+            <Overview setSelectedCategory={setSelectedCategory} />
+          </div> */}
+        </div>
+      </div>
     </div>
   );
 }
+
 
 function ArrowRightIcon(props) {
   return (

@@ -10,8 +10,6 @@ import useSWR from "swr";
 import { useState } from "react";
 import { HTMLContentRenderer } from "./HTMLContentRenderer";
 
-
-
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export function Overview({ setSelectedCategory }) {
@@ -33,7 +31,6 @@ export function Overview({ setSelectedCategory }) {
   if (isLoading) return <div>Loading...</div>;
 
   const uniqueCategories = new Set(data.map((post) => post.category));
-
 
   const handleCategoryClick = (category) => {
     setCategory(category);
@@ -80,7 +77,7 @@ export function Overview({ setSelectedCategory }) {
               </Link>
             </li>
             {Array.from(uniqueCategories).map((category, index) => (
-              <li>
+              <li key={index}>
                 <Link
                   href="#"
                   className={`text-muted-foreground hover:text-foreground ${
@@ -110,7 +107,7 @@ export function Overview({ setSelectedCategory }) {
               {posts.map((post) => (
                 <li key={post.id}>
                   <Link
-                    href={`/blog/${post.id}`}
+                    href={`/blog/${post.slug}`}
                     className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
                   >
                     <img

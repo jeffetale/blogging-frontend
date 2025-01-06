@@ -1,22 +1,31 @@
-import React, { useEffect } from 'react';
+// src/components/HTMLContentRenderer.js
+
+import React, { useEffect, useRef } from 'react';
 import DOMPurify from 'dompurify';
 import Prism from 'prismjs';
-import 'prismjs/themes/prism-okaidia.css'; // You can choose a different theme
+import '../styles/prism-okaidia-custom.css';
 import 'prismjs/components/prism-javascript';
 import 'prismjs/components/prism-css';
 import 'prismjs/components/prism-python';
 
 export function HTMLContentRenderer({ content }) {
+  const containerRef = useRef(null);
   const sanitizedContent = DOMPurify.sanitize(content);
 
   useEffect(() => {
-    Prism.highlightAll();
+    if (containerRef.current) {
+      const codeBlocks = containerRef.current.querySelectorAll('pre code');
+      codeBlocks.forEach((block) => {
+        Prism.highlightElement(block);
+      });
+    }
   }, [content]);
 
   return (
-    <div 
+    <div
+      ref={containerRef}
       className="prose max-w-none"
-      dangerouslySetInnerHTML={{ __html: sanitizedContent }} 
+      dangerouslySetInnerHTML={{ __html: sanitizedContent }}
     />
   );
 }
