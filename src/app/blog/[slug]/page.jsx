@@ -192,7 +192,11 @@ export default function BlogPost() {
     <div className="max-w-4xl mx-auto px-4 py-8">
       <div className="relative mb-16 pb-8">
         <img
-          src={`${backendBaseURL}${post.image_url_medium}`}
+          src={
+            post.image_url_medium.startsWith("http")
+              ? post.image_url_medium
+              : `${backendBaseURL}${post.image_url_medium}`
+          }
           alt="Blog post cover"
           className="w-full h-96 object-none rounded-lg shadow-lg"
         />
