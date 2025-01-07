@@ -111,7 +111,11 @@ export function Overview({ setSelectedCategory }) {
                     className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
                   >
                     <img
-                      src={`${backendBaseURL}${post.image_url_small}`}
+                      src={
+                        post.image_url_small.startsWith("http")
+                          ? post.image_url_small
+                          : `${backendBaseURL}${post.image_url_small}`
+                      }
                       width={80}
                       height={80}
                       alt="Popular post image"

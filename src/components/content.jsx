@@ -78,7 +78,11 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <img
-                      src={`${backendBaseURL}${featuredPost.image_url_medium}`}
+                      src={
+                        featuredPost.image_url_medium.startsWith("http")
+                          ? featuredPost.image_url_medium
+                          : `${backendBaseURL}${featuredPost.image_url_medium}`
+                      }
                       alt={featuredPost.title}
                       className="w-full h-64 object-cover rounded-l-lg"
                     />
@@ -126,7 +130,11 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                     onClick={() => handlePostClick(post.slug)}
                   >
                     <img
-                      src={`${backendBaseURL}${post.image_url_large}`}
+                      src={
+                        post.image_url_large.startsWith("http")
+                          ? post.image_url_large
+                          : `${backendBaseURL}${post.image_url_large}`
+                      }
                       alt={post.title}
                       className="w-full h-48 object-cover"
                     />
