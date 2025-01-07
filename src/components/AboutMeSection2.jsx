@@ -21,7 +21,7 @@ export default function AboutMeSection2() {
                       as="h1"
                       className="lg:text-[20px] text-[24px] tracking-[0.72px] ml-32 font-semibold text-black-900 md:ml-0"
                     >
-                      Hi I am{""}
+                      Hi I am{" "}
                     </Heading>
                     <div className="h-[466px] relative self-stretch">
                       <div className="absolute left-0 right-0 top-0 mx-auto flex flex-col items-start">
@@ -75,11 +75,11 @@ export default function AboutMeSection2() {
               as="p"
               className="lg:text-[17px] leading-[31px] z-[2] text-[21px] tracking-[0.63px] mt-[-14px] w-[84%] relative mr-20 text-justify font-normal text-black-900 lg:w-full md:mr-0 md:w-full"
             >
-              I'm a tech enthusiast who loves breaking stuff and building cool
-              software solutions. When I'm not crafting clean code or finding
-              sneaky vulnerabilities, I'm always up for a challenge. Besides
-              coding, you'll probably find me geeking out over the latest AI
-              trends or stalking the web.
+              I&apos;m a tech enthusiast who loves breaking stuff and building
+              cool software solutions. When I&apos;m not crafting clean code or
+              finding sneaky vulnerabilities, I&apos;m always up for a
+              challenge. Besides coding, you&apos;ll probably find me geeking
+              out over the latest AI trends or stalking the web.
             </Text>
           </div>
           <div className="w-[36%] md:w-full">
@@ -208,7 +208,7 @@ export default function AboutMeSection2() {
                   size="headingxs"
                   as="h4"
                   className="lg:text-[20px] text-[24px] tracking-[0.72px] mt-3.5 font-semibold text-black-900"
-                > 
+                >
                   Backend
                 </Heading>
                 <SeekBar
@@ -227,7 +227,7 @@ export default function AboutMeSection2() {
                 </Heading>
                 <div className="mt-2 self-stretch">
                   <div className="h-[32px] relative">
-                    <div style={{width: "0%"}} className="absolute h-full" />
+                    <div style={{ width: "0%" }} className="absolute h-full" />
                   </div>
                 </div>
               </div>

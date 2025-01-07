@@ -6,6 +6,7 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import Link from "next/link";
 import useSWR from "swr";
+import Image from "next/image";
 
 import { useState } from "react";
 import { HTMLContentRenderer } from "./HTMLContentRenderer";
@@ -54,9 +55,9 @@ export function Overview({ setSelectedCategory }) {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            Welcome to my blog! I'm a passionate web developer, designer and
-            ethical hacker, sharing my insights and experiences on the latest
-            trends and technologies in the industry.
+            Welcome to my blog! I&apos;m a passionate web developer, designer
+            and ethical hacker, sharing my insights and experiences on the
+            latest trends and technologies in the industry.
           </p>
         </CardContent>
       </Card>
@@ -110,17 +111,19 @@ export function Overview({ setSelectedCategory }) {
                     href={`/blog/${post.slug}`}
                     className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
                   >
-                    <img
-                      src={
-                        post.image_url_small.startsWith("http")
-                          ? post.image_url_small
-                          : `${backendBaseURL}${post.image_url_small}`
-                      }
-                      width={80}
-                      height={80}
-                      alt="Popular post image"
-                      className="rounded-md"
-                    />
+                    <div className="relative w-full h-64">
+                      <Image
+                        src={
+                          post.image_url_small.startsWith("http")
+                            ? post.image_url_small
+                            : `${backendBaseURL}${post.image_url_small}`
+                        }
+                        alt="Popular post image"
+                        width={80} 
+                        height={80} 
+                        className="rounded-md object-cover"
+                      />
+                    </div>
                     <div>
                       <h4 className="text-lg font-semibold">{post.title}</h4>
                       <p className="text-sm text-muted-foreground">

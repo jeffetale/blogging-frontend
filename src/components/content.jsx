@@ -14,6 +14,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Search, Clock, Tag } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image"; 
 
 const AnimatedCard = motion(Card);
 const fetcher = (url) => fetch(url).then((res) => res.json());
@@ -77,15 +78,19 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                   onClick={() => handlePostClick(featuredPost.slug)}
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <img
+                    <Image
                       src={
                         featuredPost.image_url_medium.startsWith("http")
                           ? featuredPost.image_url_medium
                           : `${backendBaseURL}${featuredPost.image_url_medium}`
                       }
                       alt={featuredPost.title}
-                      className="w-full h-64 object-cover rounded-l-lg"
+                      width={2000}
+                      height={400}
+                      className="object-cover rounded-l-lg"
+                      style={{ width: "100%", height: "100%" }} // Make image responsive
                     />
+
                     <div className="p-6 flex flex-col justify-between">
                       <div>
                         <h3 className="text-2xl font-bold mb-2">
@@ -129,14 +134,16 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                     transition={{ type: "spring", stiffness: 300 }}
                     onClick={() => handlePostClick(post.slug)}
                   >
-                    <img
+                    <Image
                       src={
                         post.image_url_large.startsWith("http")
                           ? post.image_url_large
                           : `${backendBaseURL}${post.image_url_large}`
                       }
                       alt={post.title}
-                      className="w-full h-48 object-cover"
+                      width={600} // Add appropriate width
+                      height={400} // Add appropriate height
+                      className="object-cover w-full h-48"
                     />
                     <CardHeader>
                       <h3 className="text-xl font-bold">{post.title}</h3>

@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { FaEdit, FaTrash, FaClock, FaUser, FaEye } from "react-icons/fa";
 import { HTMLContentRenderer } from "@/components/HTMLContentRenderer";
 import { Editor } from "@tinymce/tinymce-react";
+import Image from "next/image";
 
 const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL; 
 
@@ -190,18 +191,17 @@ export default function BlogPost() {
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="relative mb-16 pb-8">
-        <img
-          src={
-            post.image_url_medium.startsWith("http")
-              ? post.image_url_medium
-              : `${backendBaseURL}${post.image_url_medium}`
-          }
-          alt="Blog post cover"
-          className="w-full h-96 object-none rounded-lg shadow-lg"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black/70"></div>
-      </div>
+      <Image
+        src={
+          post.image_url_medium.startsWith("http")
+            ? post.image_url_medium
+            : `${backendBaseURL}${post.image_url_medium}`
+        }
+        alt="Blog post cover"
+        width={1200} 
+        height={600}
+        className="w-full h-96 object-cover rounded-lg shadow-lg"
+      />
 
       <div className="relative z-10 -mt-32 bg-white rounded-lg shadow-lg p-8">
         <h1 className="text-4xl font-bold text-gray-900 mb-6">{post.title}</h1>
