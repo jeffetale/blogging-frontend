@@ -43,31 +43,40 @@ export function BlogForm() {
     const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
     e.preventDefault();
     const validationErrors = validate();
+
     if (Object.keys(validationErrors).length === 0) {
       setIsSubmitting(true);
       try {
         const token = Cookies.get("access_token");
         const formDataToSend = new FormData();
+
         for (const key in formData) {
           formDataToSend.append(key, formData[key]);
         }
         formDataToSend.append("image", image);
 
-        const response = await fetch(
-          `${backendBaseURL}/api/v1/blog_posts`,
-          {
-            method: "POST",
-            headers: {
-             
-              Authorization: `Bearer ${token}`,
-            },
-            body: formDataToSend,
-          }
-        );
-        if (!response.ok) throw new Error("Network response was not ok");
+        const response = await fetch(`${backendBaseURL}/api/v1/blog_posts`, {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          body: formDataToSend,
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json().catch(() => ({}));
+          throw new Error(errorData.message || "Failed to create blog post");
+        }
+
+        const data = await response.json();
         router.push("/");
       } catch (error) {
         console.error("Error submitting form:", error);
+        setErrors({
+          submit:
+            error.message || "Failed to create blog post. Please try again.",
+        });
       } finally {
         setIsSubmitting(false);
       }
