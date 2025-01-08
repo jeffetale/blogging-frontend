@@ -111,7 +111,7 @@ export function Overview({ setSelectedCategory }) {
                     href={`/blog/${post.slug}`}
                     className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
                   >
-                    <div className="relative w-full h-64">
+                    
                       <Image
                         src={
                           post.image_url_small.startsWith("http")
@@ -123,7 +123,7 @@ export function Overview({ setSelectedCategory }) {
                         height={80} 
                         className="rounded-md object-cover"
                       />
-                    </div>
+                  
                     <div>
                       <h4 className="text-lg font-semibold">{post.title}</h4>
                       <p className="text-sm text-muted-foreground">
