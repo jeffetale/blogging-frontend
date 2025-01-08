@@ -6,10 +6,8 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import Link from "next/link";
 import useSWR from "swr";
-import Image from "next/image";
-
+import { SidebarPostItem } from "./HandleImages";
 import { useState } from "react";
-import { HTMLContentRenderer } from "./HTMLContentRenderer";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -106,32 +104,11 @@ export function Overview({ setSelectedCategory }) {
           {posts && (
             <ul className="space-y-4">
               {posts.map((post) => (
-                <li key={post.id}>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-                  >
-                    
-                      <Image
-                        src={
-                          post.image_url_small.startsWith("http")
-                            ? post.image_url_small
-                            : `${backendBaseURL}${post.image_url_small}`
-                        }
-                        alt="Popular post image"
-                        width={80} 
-                        height={80} 
-                        className="rounded-md object-cover"
-                      />
-                  
-                    <div>
-                      <h4 className="text-lg font-semibold">{post.title}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        <HTMLContentRenderer content={post.short_summary} />
-                      </p>
-                    </div>
-                  </Link>
-                </li>
+                <SidebarPostItem
+                  key={post.id}
+                  post={post}
+                  backendBaseURL={backendBaseURL}
+                />
               ))}
             </ul>
           )}
