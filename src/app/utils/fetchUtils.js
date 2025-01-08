@@ -41,25 +41,3 @@ export const submitBlogPost = async (backendBaseURL, formData, token, timeoutMs 
     timeoutMs
   );
 };
-
-// Helper function for login
-export const loginUser = async (backendBaseURL, credentials, timeoutMs = 15000) => {
-  const formData = new URLSearchParams();
-  formData.append("username", credentials.username);
-  formData.append("password", credentials.password);
-
-  return fetchWithTimeout(
-    `${backendBaseURL}/api/v1/token`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-        Accept: "application/json",
-        "X-Requested-With": "XMLHttpRequest",
-      },
-      body: formData,
-      credentials: "include",
-    },
-    timeoutMs
-  );
-};

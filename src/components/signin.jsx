@@ -10,10 +10,28 @@ import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { loginUser } from "@/app/utils/fetchUtils";
 
 async function loginFetcher(url, { arg }) {
-  const response = await loginUser(url, arg);
+  const formData = new URLSearchParams();
+  formData.append("username", arg.username);
+  formData.append("password", arg.password);
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+      "X-Requested-With": "XMLHttpRequest",
+    },
+    body: formData,
+    credentials: "include",
+    mode: "cors",
+  });
+
+  if (!response.ok) {
+    throw new Error("Invalid credentials");
+  }
+
   return response.json();
 }
 
@@ -23,7 +41,6 @@ export function Signin() {
   const router = useRouter();
   const { login } = useAuth();
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-
 
   const { trigger, error, isMutating } = useSWRMutation(
     `${backendBaseURL}/api/v1/token`,
