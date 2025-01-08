@@ -90,20 +90,44 @@ export function BlogForm() {
           formDataToSend,
           token
         );
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
         const data = await response.json();
         setPublishedPostId(data.id);
 
-        // Start checking for summary completion
-        checkSummaryStatus(data.id);
+        let attempts = 0;
+        const maxAttempts = 30; // 30 seconds timeout
+
+        const checkStatus = async () => {
+          try {
+            const statusResponse = await fetch(
+              `${backendBaseURL}/api/v1/blog_posts/id/${data.id}`
+            );
+            const post = await statusResponse.json();
+
+            if (post.summary && post.short_summary) {
+              router.push("/");
+            } else if (attempts < maxAttempts) {
+              attempts++;
+              setTimeout(checkStatus, 1000);
+            } else {
+              // Timeout reached, redirect anyway
+              router.push("/");
+            }
+          } catch (error) {
+            console.error("Error checking status:", error);
+            router.push("/");
+          }
+        };
+
+        checkStatus();
       } catch (error) {
-        console.error("Detailed error:", {
-          message: error.message,
-          stack: error.stack,
-          response: error.response,
-        });
+        console.error("Submission error:", error);
         setErrors({
-          submit:
-            error.message || "Failed to create blog post. Please try again.",
+          submit: "Failed to create blog post. Please try again.",
         });
         setIsSubmitting(false);
       }
@@ -236,10 +260,11 @@ export function BlogForm() {
             disabled={isSubmitting}
             className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105"
           >
-            {isSubmitting && <LoadingSpinner /> ? "Publishing..." : "Publish Blog Post"}
+            {isSubmitting ? "Publishing..." : "Publish Blog Post"}
           </button>
         </div>
       </form>
+      {isSubmitting && <LoadingSpinner />}
     </div>
   );
 }
