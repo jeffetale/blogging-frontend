@@ -2,8 +2,6 @@
 
 "use client";
 import useSWR from "swr";
-import { motion } from "framer-motion";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Search } from "lucide-react";
 import { useState, useEffect } from "react";
@@ -11,7 +9,6 @@ import { useRouter } from "next/navigation";
 import { FeaturedPost } from "./HandleImages";
 import { PostGridItem } from "./HandleImages";
 
-const AnimatedCard = motion(Card);
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
 export function Content({ initialSearchTerm = "", initialCategory = "" }) {

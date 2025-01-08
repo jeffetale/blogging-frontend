@@ -20,6 +20,8 @@ export function BlogForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const router = useRouter();
 
+  const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
