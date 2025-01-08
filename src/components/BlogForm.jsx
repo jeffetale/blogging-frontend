@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { Editor } from "@tinymce/tinymce-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { compressImage } from "@/app/utils/imageUtils";
+import { useFetchWithTimeout } from "@/app/utils/imageUtils";
 
 export function BlogForm() {
   const [formData, setFormData] = useState({
@@ -26,8 +28,12 @@ export function BlogForm() {
     setFormData({ ...formData, content });
   };
 
-  const handleImageChange = (e) => {
-    setImage(e.target.files[0]);
+  const handleImageChange = async (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const compressedImage = await compressImage(file, 2); // 2MB max size
+      setImage(compressedImage);
+    }
   };
 
   const validate = () => {
@@ -40,6 +46,7 @@ export function BlogForm() {
   };
 
   const handleSubmit = async (e) => {
+    const fetchWithTimeout = useFetchWithTimeout(60000); // 60 seconds
     const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
     e.preventDefault();
     const validationErrors = validate();
@@ -55,7 +62,7 @@ export function BlogForm() {
         }
         formDataToSend.append("image", image);
 
-        const response = await fetch(`${backendBaseURL}/api/v1/blog_posts`, {
+        const response = await fetchWithTimeout(`${backendBaseURL}/api/v1/blog_posts`, {
           method: "POST",
           credentials: "include",
           headers: {

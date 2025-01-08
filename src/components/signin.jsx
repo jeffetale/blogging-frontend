@@ -10,13 +10,16 @@ import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
+import { useFetchWithTimeout } from "@/app/utils/imageUtils";
 
 async function loginFetcher(url, { arg }) {
+  const fetchWithTimeout = useFetchWithTimeout(15000); // 15 seconds
+
   const formData = new URLSearchParams();
   formData.append("username", arg.username);
   formData.append("password", arg.password);
 
-  const response = await fetch(url, {
+  const response = await fetchWithTimeout(url, {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
