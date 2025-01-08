@@ -52,7 +52,7 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Add Figma colors
+        // Figma colors
         amber: { 900: "var(--amber-900)" },
         black: {
           900: "var(--black-900)",
@@ -70,6 +70,16 @@ module.exports = {
           a700: "var(--white-a700)",
           "a700-00": "var(--white-a700-00)",
         },
+      },
+      animation: {
+        progressBar: 'progressBar 2s ease-in-out infinite',
+      },
+      keyframes: {
+        progressBar: {
+          '0%': { width: '0%' },
+          '50%': { width: '70%' },
+          '100%': { width: '100%' }
+        }
       },
       borderRadius: {
         lg: "var(--radius)",

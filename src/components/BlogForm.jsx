@@ -19,6 +19,7 @@ export function BlogForm() {
   const [image, setImage] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [publishedPostId, setPublishedPostId] = useState(null);
   const router = useRouter();
 
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
