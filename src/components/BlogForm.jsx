@@ -7,6 +7,7 @@ import { Editor } from "@tinymce/tinymce-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { compressImage } from "@/app/utils/imageUtils";
 import { submitBlogPost } from "@/app/utils/fetchUtils";
+import LoadingSpinner from "./ui/LoadingSpinner";
 
 export function BlogForm() {
   const [formData, setFormData] = useState({
@@ -47,6 +48,27 @@ export function BlogForm() {
     return tempErrors;
   };
 
+  const checkSummaryStatus = async (postId) => {
+    try {
+      const response = await fetch(
+        `${backendBaseURL}/api/v1/blog_posts/id/${postId}`
+      );
+      const post = await response.json();
+
+      if (post.summary && post.short_summary) {
+        // Summaries are ready, redirect to home
+        router.push("/");
+      } else {
+        // Check again in 1 second
+        setTimeout(() => checkSummaryStatus(postId), 1000);
+      }
+    } catch (error) {
+      console.error("Error checking summary status:", error);
+      // If there's an error, just redirect to home after 5 seconds as fallback
+      setTimeout(() => router.push("/"), 5000);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const validationErrors = validate();
@@ -62,15 +84,16 @@ export function BlogForm() {
         }
         formDataToSend.append("image", image);
 
-        console.log("Submitting to:", `${backendBaseURL}/api/v1/blog_posts`);
         const response = await submitBlogPost(
           backendBaseURL,
           formDataToSend,
           token
         );
-        console.log("Response:", response);
         const data = await response.json();
-        router.push("/");
+        setPublishedPostId(data.id);
+
+        // Start checking for summary completion
+        checkSummaryStatus(data.id);
       } catch (error) {
         console.error("Detailed error:", {
           message: error.message,
@@ -81,7 +104,6 @@ export function BlogForm() {
           submit:
             error.message || "Failed to create blog post. Please try again.",
         });
-      } finally {
         setIsSubmitting(false);
       }
     } else {
@@ -213,7 +235,7 @@ export function BlogForm() {
             disabled={isSubmitting}
             className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105"
           >
-            {isSubmitting ? "Publishing..." : "Publish Blog Post"}
+            {isSubmitting && <LoadingSpinner /> ? "Publishing..." : "Publish Blog Post"}
           </button>
         </div>
       </form>
