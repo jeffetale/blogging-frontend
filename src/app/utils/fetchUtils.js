@@ -59,7 +59,6 @@ export const loginUser = async (backendBaseURL, credentials, timeoutMs = 15000) 
       },
       body: formData,
       credentials: "include",
-      mode: "cors",
     },
     timeoutMs
   );
