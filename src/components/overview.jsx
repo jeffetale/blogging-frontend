@@ -6,9 +6,8 @@ import { Card, CardContent, CardHeader } from "./ui/card";
 import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import Link from "next/link";
 import useSWR from "swr";
-
+import { SidebarPostItem } from "./HandleImages";
 import { useState } from "react";
-import { HTMLContentRenderer } from "./HTMLContentRenderer";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -54,9 +53,9 @@ export function Overview({ setSelectedCategory }) {
         </CardHeader>
         <CardContent>
           <p className="text-muted-foreground">
-            Welcome to my blog! I'm a passionate web developer, designer and
-            ethical hacker, sharing my insights and experiences on the latest
-            trends and technologies in the industry.
+            Welcome to my blog! I&apos;m a passionate web developer, designer
+            and ethical hacker, sharing my insights and experiences on the
+            latest trends and technologies in the industry.
           </p>
         </CardContent>
       </Card>
@@ -105,30 +104,11 @@ export function Overview({ setSelectedCategory }) {
           {posts && (
             <ul className="space-y-4">
               {posts.map((post) => (
-                <li key={post.id}>
-                  <Link
-                    href={`/blog/${post.slug}`}
-                    className="flex items-center gap-4 text-muted-foreground hover:text-foreground"
-                  >
-                    <img
-                      src={
-                        post.image_url_small.startsWith("http")
-                          ? post.image_url_small
-                          : `${backendBaseURL}${post.image_url_small}`
-                      }
-                      width={80}
-                      height={80}
-                      alt="Popular post image"
-                      className="rounded-md"
-                    />
-                    <div>
-                      <h4 className="text-lg font-semibold">{post.title}</h4>
-                      <p className="text-sm text-muted-foreground">
-                        <HTMLContentRenderer content={post.short_summary} />
-                      </p>
-                    </div>
-                  </Link>
-                </li>
+                <SidebarPostItem
+                  key={post.id}
+                  post={post}
+                  backendBaseURL={backendBaseURL}
+                />
               ))}
             </ul>
           )}

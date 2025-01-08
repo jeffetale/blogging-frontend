@@ -17,7 +17,7 @@ export default function AboutPage() {
 
       <div className="mt-[180px] w-[48%] mb-1 flex flex-col gap-12 lg:w-full lg:px-5 md:w-full md:px-5">
         <div className="flex flex-col items-center gap-3.5">
-          <Text 
+          <Text
             size="h2_65"
             as="h1"
             className="md:text-[48px] font-semibold tracking-[1.95px] lg:text-[48px] md:text-[48px] text-[65px] text-black-900"
@@ -30,7 +30,7 @@ export default function AboutPage() {
             className="self-stretch text-center text-[21px] font-normal leading-[31px] tracking-[0.63px] lg:text-[17px] text-black-900"
           >
             Whether you need secure software solutions or want to make sure your
-            systems can withstand attacks, let's team up and build something
+            systems can withstand attacks, let&apos;s team up and build something
             rock-solid together.
           </Text>
         </div>

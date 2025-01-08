@@ -6,11 +6,12 @@ import { useState, useEffect } from "react";
 import { useParams } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 import { useRouter } from "next/navigation";
-import { FaEdit, FaTrash, FaClock, FaUser, FaEye } from "react-icons/fa";
 import { HTMLContentRenderer } from "@/components/HTMLContentRenderer";
 import { Editor } from "@tinymce/tinymce-react";
+import { PostHero } from "@/components/HandleImages";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
-const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL; 
+const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 async function getBlogPost(slug) {
   console.log(`Fetching blog post with slug: ${slug}`);
@@ -36,31 +37,25 @@ async function checkOwnership(postId, token) {
 }
 
 async function updateBlogPost(postId, token, updatedData) {
-  const res = await fetch(
-    `${backendBaseURL}/api/v1/blog_posts/${postId}/`,
-    {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(updatedData),
-    }
-  );
+  const res = await fetch(`${backendBaseURL}/api/v1/blog_posts/${postId}/`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify(updatedData),
+  });
   if (!res.ok) throw new Error("Failed to update post");
   return res.json();
 }
 
 async function deleteBlogPost(postId, token) {
-  const res = await fetch(
-    `${backendBaseURL}/api/v1/blog_posts/${postId}/`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
-  );
+  const res = await fetch(`${backendBaseURL}/api/v1/blog_posts/${postId}/`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   if (!res.ok) throw new Error("Failed to delete post");
 }
 
@@ -180,50 +175,12 @@ export default function BlogPost() {
     return <div className="text-center text-2xl mt-10">Loading...</div>;
   }
 
-  const formatDate = (dateString) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
   return (
     <div className="max-w-4xl mx-auto px-4 py-8">
-      <div className="relative mb-16 pb-8">
-        <img
-          src={
-            post.image_url_medium.startsWith("http")
-              ? post.image_url_medium
-              : `${backendBaseURL}${post.image_url_medium}`
-          }
-          alt="Blog post cover"
-          className="w-full h-96 object-none rounded-lg shadow-lg"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black/70"></div>
-      </div>
+      <PostHero post={post} backendBaseURL={backendBaseURL} />
 
-      <div className="relative z-10 -mt-32 bg-white rounded-lg shadow-lg p-8">
-        <h1 className="text-4xl font-bold text-gray-900 mb-6">{post.title}</h1>
-        <div className="flex flex-wrap items-center text-gray-600 mb-8 space-x-4">
-          <span className="flex items-center">
-            <FaUser className="mr-2" /> {post.user?.username || "Anonymous"}
-          </span>
-          <span className="flex items-center">
-            <FaClock className="mr-2" /> Published:{" "}
-            {formatDate(post.created_at)}
-          </span>
-          {post.updated_at !== post.created_at && (
-            <span className="flex items-center">
-              <FaClock className="mr-2" /> Updated:{" "}
-              {formatDate(post.updated_at)}
-            </span>
-          )}
-          <span className="flex items-center">
-            <FaEye className="mr-2" /> {post.view_count} views
-          </span>
-        </div>
-
+      
+        {" "}
         {isEditing ? (
           <div className="mt-8">
             <input
@@ -309,7 +266,7 @@ export default function BlogPost() {
             )}
           </div>
         )}
-      </div>
+ 
 
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">

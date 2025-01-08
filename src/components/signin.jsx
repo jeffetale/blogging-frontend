@@ -8,7 +8,6 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import useSWRMutation from "swr/mutation";
-import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
@@ -21,9 +20,12 @@ async function loginFetcher(url, { arg }) {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
+      Accept: "application/json",
+      "X-Requested-With": "XMLHttpRequest",
     },
     body: formData,
     credentials: "include",
+    mode: "cors", 
   });
 
   if (!response.ok) {
