@@ -6,7 +6,7 @@ import Cookies from "js-cookie";
 import { Editor } from "@tinymce/tinymce-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { compressImage } from "@/app/utils/imageUtils";
-import { useFetchWithTimeout } from "@/app/utils/imageUtils";
+import { submitBlogPost } from "@/app/utils/fetchUtils";
 
 export function BlogForm() {
   const [formData, setFormData] = useState({
@@ -46,7 +46,6 @@ export function BlogForm() {
   };
 
   const handleSubmit = async (e) => {
-    const fetchWithTimeout = useFetchWithTimeout(60000); // 60 seconds
     const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
     e.preventDefault();
     const validationErrors = validate();
@@ -62,27 +61,13 @@ export function BlogForm() {
         }
         formDataToSend.append("image", image);
 
-        const response = await fetchWithTimeout(`${backendBaseURL}/api/v1/blog_posts`, {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-          body: formDataToSend,
-        });
-
-        if (!response.ok) {
-          const errorData = await response.json().catch(() => ({}));
-          throw new Error(errorData.message || "Failed to create blog post");
-        }
-
+        const response = await submitBlogPost(backendBaseURL, formDataToSend, token);
         const data = await response.json();
         router.push("/");
       } catch (error) {
         console.error("Error submitting form:", error);
         setErrors({
-          submit:
-            error.message || "Failed to create blog post. Please try again.",
+          submit: error.message || "Failed to create blog post. Please try again."
         });
       } finally {
         setIsSubmitting(false);

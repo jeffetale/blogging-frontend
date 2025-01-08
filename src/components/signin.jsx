@@ -10,31 +10,10 @@ import { useState } from "react";
 import useSWRMutation from "swr/mutation";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
-import { useFetchWithTimeout } from "@/app/utils/imageUtils";
+import { loginUser } from "@/app/utils/fetchUtils";
 
 async function loginFetcher(url, { arg }) {
-  const fetchWithTimeout = useFetchWithTimeout(15000); // 15 seconds
-
-  const formData = new URLSearchParams();
-  formData.append("username", arg.username);
-  formData.append("password", arg.password);
-
-  const response = await fetchWithTimeout(url, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-      Accept: "application/json",
-      "X-Requested-With": "XMLHttpRequest",
-    },
-    body: formData,
-    credentials: "include",
-    mode: "cors", 
-  });
-
-  if (!response.ok) {
-    throw new Error("Invalid credentials");
-  }
-
+  const response = await loginUser(url, arg);
   return response.json();
 }
 

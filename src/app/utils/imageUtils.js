@@ -52,33 +52,3 @@ export const compressImage = async (file, maxSizeMB = 1) => {
   });
 };
 
-// src/hooks/useFetchWithTimeout.js
-export const useFetchWithTimeout = (timeoutMs = 30000) => {
-  const fetchWithTimeout = async (url, options = {}) => {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
-    try {
-      const response = await fetch(url, {
-        ...options,
-        signal: controller.signal,
-      });
-      clearTimeout(timeoutId);
-      
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        throw new Error(errorData.message || 'Network response was not ok');
-      }
-      
-      return response;
-    } catch (error) {
-      clearTimeout(timeoutId);
-      if (error.name === 'AbortError') {
-        throw new Error('Request timeout');
-      }
-      throw error;
-    }
-  };
-
-  return fetchWithTimeout;
-};
