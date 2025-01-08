@@ -25,7 +25,6 @@ async function loginFetcher(url, { arg }) {
     },
     body: formData,
     credentials: "include",
-    mode: "cors",
   });
 
   if (!response.ok) {
