@@ -1,6 +1,6 @@
 // src/utils/fetchUtils.js
 
-export const fetchWithTimeout = async (url, options = {}, timeoutMs = 30000) => {
+export const fetchWithTimeout = async (url, options = {}, timeoutMs = 120000) => {  // 120 seconds timeout by default
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
 

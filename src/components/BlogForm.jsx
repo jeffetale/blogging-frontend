@@ -46,7 +46,6 @@ export function BlogForm() {
   };
 
   const handleSubmit = async (e) => {
-    const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
     e.preventDefault();
     const validationErrors = validate();
 
@@ -61,13 +60,24 @@ export function BlogForm() {
         }
         formDataToSend.append("image", image);
 
-        const response = await submitBlogPost(backendBaseURL, formDataToSend, token);
+        console.log("Submitting to:", `${backendBaseURL}/api/v1/blog_posts`);
+        const response = await submitBlogPost(
+          backendBaseURL,
+          formDataToSend,
+          token
+        );
+        console.log("Response:", response);
         const data = await response.json();
         router.push("/");
       } catch (error) {
-        console.error("Error submitting form:", error);
+        console.error("Detailed error:", {
+          message: error.message,
+          stack: error.stack,
+          response: error.response,
+        });
         setErrors({
-          submit: error.message || "Failed to create blog post. Please try again."
+          submit:
+            error.message || "Failed to create blog post. Please try again.",
         });
       } finally {
         setIsSubmitting(false);
