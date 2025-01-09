@@ -1,55 +1,156 @@
-// src/components/AboutPage.jsx
-"use client";
-
-import { Button, Input, Text } from "./about-components";
-import AboutMeSection from "./AboutMeSection2";
-import LandingPageSection from "./AboutLandingPageSection2";
 import React from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { SeekBar } from "./about-components/SeekBar";
 
-export default function AboutPage() {
+const AboutPage = () => {
+  const skills = [
+    { name: "Frontend", level: 87 },
+    { name: "Backend", level: 90 },
+    { name: "Website Design", level: 78 },
+    { name: "Security Testing", level: 80 },
+  ];
+
+  const services = [
+    {
+      title: "Full-Stack Development",
+      description:
+        "Building scalable web applications with modern technologies and best practices.",
+    },
+    {
+      title: "Security Auditing",
+      description:
+        "Comprehensive security assessments and vulnerability testing.",
+    },
+    {
+      title: "API Development",
+      description:
+        "Designing and implementing robust RESTful and GraphQL APIs.",
+    },
+    {
+      title: "DevSecOps",
+      description:
+        "Integrating security practices into the development pipeline.",
+    },
+  ];
+
   return (
-    <div className="py-[70px] flex w-full flex-col items-center bg-white-a700 lg:py-8 md:py-5 sm:py-4">
-      {/* about me section */}
-      <AboutMeSection />
+    <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
+      {/* Hero Section */}
+      <section className="pt-16 pb-32 px-4">
+        <div className="max-w-6xl mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-12">
+            {/* Text Content */}
+            <div className="flex-1 space-y-6">
+              <div className="space-y-2">
+                <h2 className="text-2xl font-semibold text-amber-900">
+                  Hi, I am
+                </h2>
+                <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
+                  Jeff Etale
+                </h1>
+                <div className="space-y-1">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+                    Software Engineer
+                  </h2>
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+                    &
+                  </h2>
+                  <h2 className="text-4xl md:text-5xl font-bold text-amber-900">
+                    Ethical Hacker
+                  </h2>
+                </div>
+              </div>
+              <p className="text-lg text-gray-600 leading-relaxed">
+                I&apos;m a tech enthusiast who loves breaking stuff and building cool
+                software solutions. When I&apos;m not crafting clean code or finding
+                sneaky vulnerabilities, I&apos;m always up for a challenge. Besides
+                coding, you&apos;ll probably find me geeking out over the latest AI
+                trends or exploring the web.
+              </p>
+            </div>
 
-      {/* landing page section */}
-      <LandingPageSection />
+            {/* Profile Image */}
+            <div className="relative">
+              <div className="w-72 h-72 rounded-full overflow-hidden ring-4 ring-amber-900 ring-offset-4">
+                <img
+                  src="/api/placeholder/400/400"
+                  alt="Profile"
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-      <div className="mt-[180px] w-[48%] mb-1 flex flex-col gap-12 lg:w-full lg:px-5 md:w-full md:px-5">
-        <div className="flex flex-col items-center gap-3.5">
-          <Text
-            size="h2_65"
-            as="h1"
-            className="md:text-[48px] font-semibold tracking-[1.95px] lg:text-[48px] md:text-[48px] text-[65px] text-black-900"
-          >
-            Got a project in mind?
-          </Text>
-          <Text
-            size="texts"
-            as="p"
-            className="self-stretch text-center text-[21px] font-normal leading-[31px] tracking-[0.63px] lg:text-[17px] text-black-900"
-          >
+      {/* Skills Section */}
+      <section className="py-24 bg-white">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-16">
+            Skills & Expertise
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+            {skills.map((skill, index) => (
+              <div key={index} className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <h3 className="text-xl font-semibold">{skill.name}</h3>
+                  <span className="text-amber-900 font-semibold">
+                    {skill.level}%
+                  </span>
+                </div>
+                <SeekBar
+                  inputValue={skill.level}
+                  trackColors={["#fd6f00", "#ececeb"]}
+                  className="h-2"
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Services Section */}
+      <section className="py-24 px-4">
+        <div className="max-w-6xl mx-auto">
+          <h2 className="text-4xl font-bold text-center mb-16">Services</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            {services.map((service, index) => (
+              <Card key={index} className="hover:shadow-lg transition-shadow">
+                <CardContent className="p-6 space-y-4">
+                  <h3 className="text-xl font-semibold text-amber-900">
+                    {service.title}
+                  </h3>
+                  <p className="text-gray-600">{service.description}</p>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Section */}
+      <section className="py-24 bg-gray-50">
+        <div className="max-w-3xl mx-auto text-center px-4">
+          <h2 className="text-4xl font-bold mb-6">Got a project in mind?</h2>
+          <p className="text-lg text-gray-600 mb-12">
             Whether you need secure software solutions or want to make sure your
             systems can withstand attacks, let&apos;s team up and build something
             rock-solid together.
-          </Text>
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <input
+              type="email"
+              placeholder="Enter your email"
+              className="px-6 py-4 rounded-lg border border-gray-300 flex-1 max-w-md"
+            />
+            <button className="px-8 py-4 bg-amber-900 text-white rounded-lg font-semibold hover:bg-amber-800 transition-colors">
+              Contact Me
+            </button>
+          </div>
         </div>
-        <div className="mx-7 flex justify-center gap-6 md:mx-0 md:flex-col">
-          <Input
-            shape="round"
-            type="email"
-            name="email"
-            placeholder={`Enter Your Email`}
-            className="rounded-[14px] tracking-[0.63px] border px-6"
-          />
-          <Button
-            shape="round"
-            className="rounded-[14px] min-w-[222px] tracking-[0.72px] px-[34px] sm:px-4"
-          >
-            Contact Me
-          </Button>
-        </div>
-      </div>
+      </section>
     </div>
   );
-}
+};
+
+export default AboutPage;

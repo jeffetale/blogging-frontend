@@ -40,27 +40,6 @@ export function Overview({ setSelectedCategory }) {
     <div>
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-4">
-            <Avatar className="w-12 h-12">
-              <AvatarImage src="/placeholder-user.jpg" />
-              <AvatarFallback>JD</AvatarFallback>
-            </Avatar>
-            <div>
-              <h3 className="text-lg font-semibold">Jeff Etale</h3>
-              <p className="text-muted-foreground">Founder, Blog Inc.</p>
-            </div>
-          </div>
-        </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            Welcome to my blog! I&apos;m a passionate web developer, designer
-            and ethical hacker, sharing my insights and experiences on the
-            latest trends and technologies in the industry.
-          </p>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
           <h3 className="text-lg font-semibold">Categories</h3>
         </CardHeader>
         <CardContent>
