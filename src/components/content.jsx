@@ -8,6 +8,7 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { FeaturedPost } from "./HandleImages";
 import { PostGridItem } from "./HandleImages";
+import { ContentSkeleton } from "./ui/HomeSkeleton";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -30,7 +31,7 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
   }, [data]);
 
   if (error) return <div>Failed to Load</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <ContentSkeleton />;
 
   const filteredPosts = data
     ? data.filter((post) => {
@@ -52,6 +53,21 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
     router.push(`/blog/${slug}`);
   };
 
+  if (error) {
+    return (
+      <div className="min-h-[800px] flex items-center justify-center">
+        <div className="text-center space-y-4">
+          <h3 className="text-xl font-semibold text-gray-800">
+            Failed to Load Content
+          </h3>
+          <p className="text-gray-600">Please try refreshing the page</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) return <ContentSkeleton />;
+
   return (
     <div className="space-y-12">
       <div className="container mx-auto px-4">
@@ -60,11 +76,12 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
           <div className="lg:col-span-2 space-y-12">
             {/* Featured Post */}
             {featuredPost && (
-              <FeaturedPost
-                post={featuredPost}
-                handlePostClick={handlePostClick}
-                backendBaseURL={backendBaseURL}
-              />
+              <div id="featured-post">
+                <FeaturedPost
+                  post={featuredPost}
+                  handlePostClick={handlePostClick}
+                />
+              </div>
             )}
 
             {/* Search */}

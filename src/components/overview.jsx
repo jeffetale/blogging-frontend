@@ -8,6 +8,7 @@ import Link from "next/link";
 import useSWR from "swr";
 import { SidebarPostItem } from "./HandleImages";
 import { useState } from "react";
+import { OverviewSkeleton } from "./ui/HomeSkeleton";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -27,7 +28,7 @@ export function Overview({ setSelectedCategory }) {
   } = useSWR(`${backendBaseURL}/api/v1/popular_posts`, fetcher);
 
   if (error) return <div>Failed to Load</div>;
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <OverviewSkeleton />;
 
   const uniqueCategories = new Set(data.map((post) => post.category));
 
@@ -35,6 +36,21 @@ export function Overview({ setSelectedCategory }) {
     setCategory(category);
     setSelectedCategory(category);
   };
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <div className="bg-white rounded-xl p-6 shadow-sm">
+          <h3 className="text-lg font-semibold text-gray-800">
+            Unable to Load
+          </h3>
+          <p className="text-gray-600">Please try again later</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (isLoading) return <OverviewSkeleton />;
 
   return (
     <div>
