@@ -104,7 +104,7 @@ const AboutPage = () => {
                 cool software solutions. When I&apos;m not crafting clean code
                 or finding sneaky vulnerabilities, I&apos;m always up for a
                 challenge. Besides coding, you&apos;ll probably find me geeking
-                out over the latest AI trends or exploring the web.
+                out over the latest AI trends or stalking the stock market.
               </p>
             </div>
 
