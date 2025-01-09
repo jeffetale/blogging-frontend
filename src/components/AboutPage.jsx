@@ -1,6 +1,12 @@
+// src/components/AboutPage.jsx
+
+"use client";
+
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { SeekBar } from "./about-components/SeekBar";
+import { useEffect, useState } from "react/cjs/react.production.min";
+import { AboutPageImage } from "./HandleImages";
 
 const AboutPage = () => {
   const skills = [
@@ -33,6 +39,26 @@ const AboutPage = () => {
     },
   ];
 
+  const [profileImage, setProfileImage] = useState(null); 
+
+  useEffect(() => {
+    fetchActiveImage();
+  }, []);
+
+  const fetchActiveImage = async () => {
+    try {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/images/active`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        setProfileImage(data);
+      }
+    } catch (error) {
+      console.error("Error fetching active image:", error);
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Hero Section */}
@@ -61,21 +87,21 @@ const AboutPage = () => {
                 </div>
               </div>
               <p className="text-lg text-gray-600 leading-relaxed">
-                I&apos;m a tech enthusiast who loves breaking stuff and building cool
-                software solutions. When I&apos;m not crafting clean code or finding
-                sneaky vulnerabilities, I&apos;m always up for a challenge. Besides
-                coding, you&apos;ll probably find me geeking out over the latest AI
-                trends or exploring the web.
+                I&apos;m a tech enthusiast who loves breaking stuff and building
+                cool software solutions. When I&apos;m not crafting clean code
+                or finding sneaky vulnerabilities, I&apos;m always up for a
+                challenge. Besides coding, you&apos;ll probably find me geeking
+                out over the latest AI trends or exploring the web.
               </p>
             </div>
 
             {/* Profile Image */}
             <div className="relative">
               <div className="w-72 h-72 rounded-full overflow-hidden ring-4 ring-amber-900 ring-offset-4">
-                <img
-                  src="/api/placeholder/400/400"
-                  alt="Profile"
-                  className="w-full h-full object-cover"
+                <AboutPageImage
+                  imageUrl={profileImage?.image_url}
+                  backendBaseURL={backendBaseURL}
+                  className="w-full h-full"
                 />
               </div>
             </div>
@@ -134,8 +160,8 @@ const AboutPage = () => {
           <h2 className="text-4xl font-bold mb-6">Got a project in mind?</h2>
           <p className="text-lg text-gray-600 mb-12">
             Whether you need secure software solutions or want to make sure your
-            systems can withstand attacks, let&apos;s team up and build something
-            rock-solid together.
+            systems can withstand attacks, let&apos;s team up and build
+            something rock-solid together.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <input

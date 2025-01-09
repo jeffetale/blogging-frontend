@@ -1,4 +1,5 @@
 // src/components/HandleImages.jsx
+
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -6,7 +7,7 @@ import { CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { ArrowRight, Clock, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HTMLContentRenderer } from "./HTMLContentRenderer";
-import { FaEdit, FaTrash, FaClock, FaUser, FaEye } from "react-icons/fa";
+import { FaClock, FaUser, FaEye } from "react-icons/fa";
 
 const AnimatedCard = motion.div;
 
@@ -185,9 +186,27 @@ export const PostHero = ({ post, backendBaseURL }) => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
 
-      {/* Bottom spacing */}
-      {/* <div className="h-12" />   */}
+export const AboutPageImage = ({ imageUrl, backendBaseURL, className }) => {
+  const finalImageUrl = imageUrl?.startsWith("http")
+    ? imageUrl
+    : imageUrl
+    ? `${backendBaseURL}${imageUrl}`
+    : "/api/placeholder/400/400"; // Fallback image
+
+  return (
+    <div className={`relative ${className}`}>
+      <Image
+        src={finalImageUrl}
+        alt="Profile"
+        fill
+        sizes="(max-width: 768px) 100vw, 288px" // 288px is equivalent to w-72
+        className="object-cover"
+        priority 
+      />
     </div>
   );
 };

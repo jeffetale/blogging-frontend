@@ -3,7 +3,6 @@
 "use client";
 
 import Link from "next/link";
-import { Input } from "./ui/input";
 import { LogoutButton } from "./Logout";
 import { useAuth } from "@/context/AuthContext";
 
@@ -47,6 +46,15 @@ export function Navbar({ setSearchTerm }) {
             Contact
           </Link>
           {loggedIn && <LogoutButton />}
+          {loggedIn && (
+            <Link
+              href="/admin"
+              className="text-muted-foreground hover:text-foreground"
+              prefetch={false}
+            >
+              Profile
+            </Link>
+          )}
         </nav>
         <div className="relative hidden md:block">
           {/* <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
