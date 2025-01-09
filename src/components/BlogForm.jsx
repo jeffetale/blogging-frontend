@@ -158,19 +158,6 @@ export function BlogForm() {
             </Alert>
           )}
         </div>
-
-        {/* <div className="relative">
-          <input
-            type="text"
-            name="subtitle"
-            id="subtitle"
-            value={formData.subtitle}
-            onChange={handleChange}
-            placeholder="Add a subtitle (optional)"
-            className="w-full py-2 px-4 border-b-2 border-gray-300 focus:border-indigo-500 transition-colors duration-300 outline-none text-lg"
-          />
-        </div> */}
-
         <div className="relative">
           <Editor
             apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}

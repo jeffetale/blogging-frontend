@@ -1,4 +1,5 @@
 // src/components/HandleImages.jsx
+
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
@@ -6,7 +7,7 @@ import { CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { ArrowRight, Clock, Tag } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { HTMLContentRenderer } from "./HTMLContentRenderer";
-import { FaEdit, FaTrash, FaClock, FaUser, FaEye } from "react-icons/fa";
+import { FaClock, FaUser, FaEye } from "react-icons/fa";
 
 const AnimatedCard = motion.div;
 
@@ -153,11 +154,7 @@ export const PostHero = ({ post, backendBaseURL }) => {
           priority
           className="object-cover"
         />
-        {/* Gradient overlay */}
-        {/* <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/50 to-black/70" /> */}
       </div>
-
-      {/* Content container - moved down and given more space from image */}
       <div className="relative mx-auto px-4 -mt-24">
         <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-xl p-8">
           <h1 className="text-4xl font-bold text-gray-900 mb-6">
@@ -185,9 +182,30 @@ export const PostHero = ({ post, backendBaseURL }) => {
           </div>
         </div>
       </div>
+    </div>
+  );
+};
 
-      {/* Bottom spacing */}
-      {/* <div className="h-12" />   */}
+export const AboutPageImage = ({ imageUrl, backendBaseURL, className }) => {
+  const getValidImageUrl = () => {
+    if (!imageUrl) {
+      return "/api/placeholder/400/400"; // Placeholder image
+    }
+    return imageUrl.startsWith("http")
+      ? imageUrl
+      : `${backendBaseURL}${imageUrl}`;
+  };
+
+  return (
+    <div className={`relative ${className}`}>
+      <Image
+        src={getValidImageUrl()}
+        alt="Profile"
+        fill
+        sizes="(max-width: 768px) 100vw, 288px"
+        className="object-cover"
+        priority
+      />
     </div>
   );
 };
