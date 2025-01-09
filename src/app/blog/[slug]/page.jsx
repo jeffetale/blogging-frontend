@@ -10,6 +10,7 @@ import { HTMLContentRenderer } from "@/components/HTMLContentRenderer";
 import { Editor } from "@tinymce/tinymce-react";
 import { PostHero } from "@/components/HandleImages";
 import { FaEdit, FaTrash } from "react-icons/fa";
+import BlogPostSkeleton from "@/components/ui/HomeSkeleton";
 
 const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -172,80 +173,79 @@ export default function BlogPost() {
   }
 
   if (!post) {
-    return <div className="text-center text-2xl mt-10">Loading...</div>;
+    return <BlogPostSkeleton />;
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8">
-      <PostHero post={post} backendBaseURL={backendBaseURL} />
-
-      
-        {" "}
-        {isEditing ? (
-          <div className="mt-8">
-            <input
-              type="text"
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-              className="w-full p-2 mb-4 text-2xl font-bold border-b-2 border-gray-300 focus:border-blue-500 outline-none"
-            />
-            <Editor
-              apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-              value={editedContent}
-              onEditorChange={(content) => setEditedContent(content)}
-              init={{
-                height: 500,
-                menubar: true,
-                plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
-                  "codesample",
-                  "lists",
-                  "lists advlist",
-                  "fullscreen",
-                ],
-                toolbar:
-                  "undo redo | formatselect | bold italic backcolor | \
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 pb-24">
+      <PostHero post={post} backendBaseURL={backendBaseURL} />{" "}
+      {isEditing ? (
+        <div className="mt-8">
+          <input
+            type="text"
+            value={editedTitle}
+            onChange={(e) => setEditedTitle(e.target.value)}
+            className="w-full p-2 mb-4 text-2xl font-bold border-b-2 border-gray-300 focus:border-blue-500 outline-none"
+          />
+          <Editor
+            apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
+            value={editedContent}
+            onEditorChange={(content) => setEditedContent(content)}
+            init={{
+              height: 500,
+              menubar: true,
+              plugins: [
+                "advlist autolink lists link image charmap print preview anchor",
+                "searchreplace visualblocks code fullscreen",
+                "insertdatetime media table paste code help wordcount",
+                "codesample",
+                "lists",
+                "lists advlist",
+                "fullscreen",
+              ],
+              toolbar:
+                "undo redo | formatselect | bold italic backcolor | \
                   alignleft aligncenter alignright alignjustify | \
                   bullist numlist outdent indent | removeformat | code codesample | help | bullist numlist | fullscreen",
-                codesample_languages: [
-                  { text: "HTML/XML", value: "markup" },
-                  { text: "JavaScript", value: "javascript" },
-                  { text: "CSS", value: "css" },
-                  { text: "PHP", value: "php" },
-                  { text: "Ruby", value: "ruby" },
-                  { text: "Python", value: "python" },
-                  { text: "Java", value: "java" },
-                  { text: "C", value: "c" },
-                  { text: "C#", value: "csharp" },
-                  { text: "C++", value: "cpp" },
-                ],
-                content_style: `
+              codesample_languages: [
+                { text: "HTML/XML", value: "markup" },
+                { text: "JavaScript", value: "javascript" },
+                { text: "CSS", value: "css" },
+                { text: "PHP", value: "php" },
+                { text: "Ruby", value: "ruby" },
+                { text: "Python", value: "python" },
+                { text: "Java", value: "java" },
+                { text: "C", value: "c" },
+                { text: "C#", value: "csharp" },
+                { text: "C++", value: "cpp" },
+              ],
+              content_style: `
                   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.4; }
                   pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
                   code { font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; }
                 `,
-              }}
-            />
-            <div className="flex justify-end space-x-4 mt-4">
-              <button
-                onClick={handleSave}
-                className="px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105"
-              >
-                Save Changes
-              </button>
-              <button
-                onClick={handleCancel}
-                className="px-6 py-2 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition duration-300 ease-in-out transform hover:scale-105"
-              >
-                Cancel
-              </button>
-            </div>
+            }}
+          />
+          <div className="flex justify-end space-x-4 mt-4">
+            <button
+              onClick={handleSave}
+              className="px-6 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition duration-300 ease-in-out transform hover:scale-105"
+            >
+              Save Changes
+            </button>
+            <button
+              onClick={handleCancel}
+              className="px-6 py-2 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition duration-300 ease-in-out transform hover:scale-105"
+            >
+              Cancel
+            </button>
           </div>
-        ) : (
-          <div className="mt-8">
-            <div className="prose prose-lg max-w-none">
+        </div>
+      ) : (
+        // {/* Main Content */}
+        <div className="max-w-4xl mx-auto px-4 pt-32 pb-16">
+          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-8">
+            <div className="prose prose-lg dark:prose-invert max-w-none">
               <HTMLContentRenderer content={post.content} />
             </div>
             {isOwner && (
@@ -265,9 +265,8 @@ export default function BlogPost() {
               </div>
             )}
           </div>
-        )}
- 
-
+        </div>
+      )}
       {showDeleteConfirm && (
         <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm flex items-center justify-center z-50">
           <div className="bg-white rounded-lg p-8 max-w-md w-full">

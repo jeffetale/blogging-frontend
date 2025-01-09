@@ -129,6 +129,7 @@ export const SidebarPostItem = ({ post, backendBaseURL }) => {
 };
 
 
+// Blog Post Image & Metadata Component
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("en-US", {
     year: "numeric",
@@ -143,43 +144,52 @@ export const PostHero = ({ post, backendBaseURL }) => {
     : `${backendBaseURL}${post.image_url_medium}`;
 
   return (
-    <div className="space-y-0.5">
-      {/* Image container */}
-      <div className="relative w-full h-[400px]">
-        <Image
-          src={imageUrl}
-          alt="Blog post cover"
-          fill
-          sizes="100vw"
-          priority
-          className="object-cover"
+    <div className="relative min-h-[600px] flex flex-col">
+      {/* Background Image Container - Fixed at bottom */}
+      <div className="absolute bottom-0 left-0 right-0 h-2/3 overflow-hidden">
+        <div
+          className="w-full h-full bg-cover bg-center"
+          style={{ backgroundImage: `url(${imageUrl})` }}
         />
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-gray-900/70 to-gray-900/90" />
       </div>
-      <div className="relative mx-auto px-4 -mt-24">
-        <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-xl p-8">
-          <h1 className="text-4xl font-bold text-gray-900 mb-6">
+
+      {/* Content Container - Fixed at top */}
+      <div className="relative z-10 pt-32 pb-16 px-4">
+        <div className="max-w-4xl mx-auto">
+          {/* Category Tag */}
+          {post.category && (
+            <span className="inline-block px-4 py-1 bg-blue-500 text-white text-sm font-semibold rounded-full mb-6">
+              {post.category}
+            </span>
+          )}
+
+          {/* Title */}
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-8">
             {post.title}
           </h1>
-          <div className="flex flex-wrap items-center gap-4 text-gray-600">
-            <span className="flex items-center">
-              <FaUser className="mr-2" />
-              {post.user?.username || "Anonymous"}
-            </span>
-            <span className="flex items-center">
-              <FaClock className="mr-2" />
-              Published: {formatDate(post.created_at)}
-            </span>
-            {post.updated_at !== post.created_at && (
-              <span className="flex items-center">
-                <FaClock className="mr-2" />
-                Updated: {formatDate(post.updated_at)}
+
+          {/* Metadata */}
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 text-gray-300 text-sm">
+            <div className="flex items-center space-x-2">
+              <span className="font-medium">
+                {post.user?.username || "Anonymous"}
               </span>
-            )}
-            <span className="flex items-center">
-              <FaEye className="mr-2" />
-              {post.view_count} views
-            </span>
+            </div>
+            <div className="flex items-center">
+              <span>Published: {formatDate(post.created_at)}</span>
+            </div>
+            <div className="flex items-center">
+              <span>{post.view_count.toLocaleString()} views</span>
+            </div>
           </div>
+
+          {/* Update date if different from creation date */}
+          {post.updated_at !== post.created_at && (
+            <div className="text-gray-400 text-sm mt-4">
+              Updated: {formatDate(post.updated_at)}
+            </div>
+          )}
         </div>
       </div>
     </div>
