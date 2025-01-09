@@ -5,7 +5,7 @@
 import React from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { SeekBar } from "./about-components/SeekBar";
-import { useEffect, useState } from "react/cjs/react.production.min";
+import { useEffect, useState } from "react";
 import { AboutPageImage } from "./HandleImages";
 
 const AboutPage = () => {
@@ -39,25 +39,38 @@ const AboutPage = () => {
     },
   ];
 
+  const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
   const [profileImage, setProfileImage] = useState(null); 
 
   useEffect(() => {
-    fetchActiveImage();
-  }, []);
+    const fetchActiveProfileImage = async () => {
+      try {
+        if (!backendBaseURL) {
+          console.error("Backend URL is not defined");
+          return;
+        }
 
-  const fetchActiveImage = async () => {
-    try {
-      const response = await fetch(
-        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/profile/images/active`
-      );
-      if (response.ok) {
+        const response = await fetch(
+          `${backendBaseURL}/api/v1/profile/images/active`
+        );
+
+        if (!response.ok) {
+          if (response.status === 404) {
+            return;
+          }
+          throw new Error("Failed to fetch active profile image");
+        }
+
         const data = await response.json();
         setProfileImage(data);
+      } catch (error) {
+        console.error("Error fetching profile image:", error);
+        setError(error.message);
       }
-    } catch (error) {
-      console.error("Error fetching active image:", error);
-    }
-  };
+    };
+
+    fetchActiveProfileImage();
+  }, [backendBaseURL]);
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
