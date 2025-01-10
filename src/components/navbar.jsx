@@ -8,7 +8,7 @@ import { LogoutButton } from "./Logout";
 import { useAuth } from "@/context/AuthContext";
 import { useState, useEffect } from "react";
 
-export function Navbar({ setSearchTerm }) {
+export function Navbar() {
   const { loggedIn } = useAuth();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -45,7 +45,7 @@ export function Navbar({ setSearchTerm }) {
   };
 
   return (
-    <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b shadow-sm">
+    <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-[100] w-full border-b shadow-sm">
       <div className="container mx-auto px-4 py-4 md:py-6 flex items-center">
         {/* Logo  */}
         <div className="w-48">
@@ -74,11 +74,10 @@ export function Navbar({ setSearchTerm }) {
         </nav>
 
         {/* Empty div for symmetry - Fixed width on the right */}
-        <div className="w-48 flex justify-end">
-          {/* Mobile Menu Button */}
+        <div className="w-48 flex justify-end relative z-[110]">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-muted-foreground hover:text-foreground transition-colors"
+            className="md:hidden p-2 text-foreground hover:text-primary transition-colors bg-background/80 backdrop-blur-sm rounded-lg"
             aria-label="Toggle menu"
           >
             <svg
@@ -109,48 +108,91 @@ export function Navbar({ setSearchTerm }) {
         {/* Mobile Navigation */}
         <div
           className={`
-            fixed inset-y-0 right-0 w-64 bg-background/95 shadow-lg transform transition-transform duration-300 ease-in-out
+            fixed inset-y-0 right-0 w-72 transform transition-transform duration-300 ease-in-out
             ${isOpen ? "translate-x-0" : "translate-x-full"}
             md:hidden
             flex flex-col
-            border-l backdrop-blur-lg
-            border-border
+            z-[105]
+            bg-zinc-900/95 
+            backdrop-blur-md
+            border-l border-zinc-800
+            shadow-2xl
           `}
           style={{ top: "72px" }}
         >
-          <nav className="flex flex-col px-6 py-4 gap-6">
-            <NavLink href="/" onClick={() => setIsOpen(false)}>
-              <span className="text-foreground">Home</span>
-            </NavLink>
-            <NavLink href="/about" onClick={() => setIsOpen(false)}>
-              <span className="text-foreground">About</span>
-            </NavLink>
-            <NavLink href="/new_blog" onClick={() => setIsOpen(false)}>
-              <span className="text-foreground">Blog</span>
-            </NavLink>
-            <NavLink href="/contact" onClick={() => setIsOpen(false)}>
-              <span className="text-foreground">Contact</span>
-            </NavLink>
-            {loggedIn && (
-              <>
-                <NavLink href="/admin" onClick={() => setIsOpen(false)}>
-                  <span className="text-foreground">Profile</span>
-                </NavLink>
-                <div
-                  onClick={() => setIsOpen(false)}
-                  className="text-foreground"
-                >
-                  <LogoutButton />
-                </div>
-              </>
-            )}
+          <nav className="flex flex-col px-6 py-6 gap-6">
+            {/* NavLink Component for Mobile */}
+            <div className="space-y-6">
+              <Link
+                href="/"
+                onClick={() => setIsOpen(false)}
+                className={`block transition-colors duration-200 ${
+                  pathname === "/"
+                    ? "text-primary font-medium"
+                    : "text-zinc-100 hover:text-primary"
+                }`}
+              >
+                Home
+              </Link>
+              <Link
+                href="/about"
+                onClick={() => setIsOpen(false)}
+                className={`block transition-colors duration-200 ${
+                  pathname === "/about"
+                    ? "text-primary font-medium"
+                    : "text-zinc-100 hover:text-primary"
+                }`}
+              >
+                About
+              </Link>
+              <Link
+                href="/new_blog"
+                onClick={() => setIsOpen(false)}
+                className={`block transition-colors duration-200 ${
+                  pathname === "/new_blog"
+                    ? "text-primary font-medium"
+                    : "text-zinc-100 hover:text-primary"
+                }`}
+              >
+                Blog
+              </Link>
+              <Link
+                href="/contact"
+                onClick={() => setIsOpen(false)}
+                className={`block transition-colors duration-200 ${
+                  pathname === "/contact"
+                    ? "text-primary font-medium"
+                    : "text-zinc-100 hover:text-primary"
+                }`}
+              >
+                Contact
+              </Link>
+              {loggedIn && (
+                <>
+                  <Link
+                    href="/admin"
+                    onClick={() => setIsOpen(false)}
+                    className={`block transition-colors duration-200 ${
+                      pathname === "/admin"
+                        ? "text-primary font-medium"
+                        : "text-zinc-100 hover:text-primary"
+                    }`}
+                  >
+                    Profile
+                  </Link>
+                  <div className="text-zinc-100">
+                    <LogoutButton />
+                  </div>
+                </>
+              )}
+            </div>
           </nav>
         </div>
 
-        {/* Overlay for mobile menu */}
+        {/* Overlay */}
         {isOpen && (
           <div
-            className="fixed inset-0 bg-black bg-opacity-50 md:hidden"
+            className="fixed inset-0 bg-black/80 md:hidden z-[101] backdrop-blur-sm"
             onClick={() => setIsOpen(false)}
             style={{ top: "72px" }}
           />
