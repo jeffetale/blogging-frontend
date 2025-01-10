@@ -3,12 +3,16 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { SeekBar } from "./about-components/SeekBar";
 import { useEffect, useState } from "react";
 import { AboutPageImage } from "./HandleImages";
 
 const AboutPage = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+
   const skills = [
     { name: "Frontend", level: 87 },
     { name: "Backend", level: 90 },
@@ -71,6 +75,14 @@ const AboutPage = () => {
 
     fetchActiveProfileImage();
   }, [backendBaseURL]);
+
+  const handleContactClick = (e) => {
+    e.preventDefault();
+    if (email) {
+      localStorage.setItem("contactEmail", email);
+    }
+    router.push("/contact");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
@@ -182,11 +194,14 @@ const AboutPage = () => {
             <input
               type="email"
               placeholder="Enter your email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               className="px-6 py-4 rounded-lg border border-input bg-background text-foreground 
               flex-1 max-w-md placeholder:text-muted-foreground focus:outline-none focus:ring-2 
               focus:ring-ring focus:border-input"
             />
             <button
+              onClick={handleContactClick}
               className="px-8 py-4 bg-amber-900 text-white rounded-lg font-semibold 
               hover:bg-amber-800 transition-colors focus:outline-none focus:ring-2 
               focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
