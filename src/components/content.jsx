@@ -9,6 +9,8 @@ import { useRouter } from "next/navigation";
 import { FeaturedPost } from "./HandleImages";
 import { PostGridItem } from "./HandleImages";
 import { ContentSkeleton } from "./ui/HomeSkeleton";
+import { AnimatedBlogs } from "./ui/AnimatedBlogs";
+import { motion } from "framer-motion";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -76,17 +78,27 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
           <div className="lg:col-span-2 space-y-12">
             {/* Featured Post */}
             {featuredPost && (
-              <div id="featured-post">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8 }}
+                id="featured-post"
+              >
                 <FeaturedPost
                   post={featuredPost}
                   handlePostClick={handlePostClick}
                 />
-              </div>
+              </motion.div>
             )}
 
             {/* Search */}
             <section>
-              <div className="relative w-full mb-8">
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="relative w-full mb-8"
+              >
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground" />
                 <Input
                   type="search"
@@ -95,20 +107,20 @@ export function Content({ initialSearchTerm = "", initialCategory = "" }) {
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
                 />
-              </div>
+              </motion.div>
             </section>
 
             {/* Blog Posts Grid */}
             <section>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {filteredPosts.map((post) => (
-                  <div key={post.id}>
+                {filteredPosts.map((post, index) => (
+                  <AnimatedBlogs key={post.id} index={index}>
                     <PostGridItem
                       post={post}
                       handlePostClick={handlePostClick}
                       backendBaseURL={backendBaseURL}
                     />
-                  </div>
+                  </AnimatedBlogs>
                 ))}
               </div>
             </section>

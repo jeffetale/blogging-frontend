@@ -75,7 +75,7 @@ const AnimatedHero = () => {
 
         {/* Content over video */}
         <div className="relative z-10 h-full flex flex-col items-center justify-center text-white px-4">
-          <h1 className="text-4xl md:text-6xl font-bold mb-4">
+          <h1 className="text-4xl md:text-6xl font-bold mb-4 drop-shadow-[0px_0px_39px_rgba(255,0,123,0.9)]">
             Welcome to My Blog
           </h1>
           <p className="text-xl md:text-2xl mb-8 text-center max-w-2xl">

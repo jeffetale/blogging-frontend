@@ -1,13 +1,13 @@
 // src/components/BlogForm.jsx
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { Editor } from "@tinymce/tinymce-react";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { compressImage } from "@/app/utils/imageUtils";
 import { submitBlogPost } from "@/app/utils/fetchUtils";
-import LoadingSpinner from "./ui/LoadingSpinner";
+import { X, Image as ImageIcon, Upload, Tag } from "lucide-react";
 
 export function BlogForm() {
   const [formData, setFormData] = useState({
@@ -17,9 +17,12 @@ export function BlogForm() {
     category: "",
   });
   const [image, setImage] = useState(null);
+  const [imagePreview, setImagePreview] = useState(null);
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [publishedPostId, setPublishedPostId] = useState(null);
+  const [submissionStatus, setSubmissionStatus] = useState("idle"); // idle, submitting, processing, success, error
+  const [isDragging, setIsDragging] = useState(false);
+  const [activeSection, setActiveSection] = useState("write");
   const router = useRouter();
 
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
@@ -34,10 +37,46 @@ export function BlogForm() {
 
   const handleImageChange = async (e) => {
     const file = e.target.files[0];
+    await processImage(file);
+  };
+
+  const processImage = async (file) => {
     if (file) {
-      const compressedImage = await compressImage(file, 2); // 2MB max size
+      const compressedImage = await compressImage(file, 2);
       setImage(compressedImage);
+
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setImagePreview(reader.result);
+      };
+      reader.readAsDataURL(compressedImage);
     }
+  };
+
+  const handleDrop = useCallback(async (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+
+    const file = e.dataTransfer.files[0];
+    if (file?.type.startsWith("image/")) {
+      await processImage(file);
+    }
+  }, []);
+
+  const handleDragOver = useCallback((e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  }, []);
+
+  const handleDragLeave = useCallback((e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  }, []);
+
+  const removeImage = () => {
+    setImage(null);
+    setImagePreview(null);
   };
 
   const validate = () => {
@@ -76,6 +115,8 @@ export function BlogForm() {
 
     if (Object.keys(validationErrors).length === 0) {
       setIsSubmitting(true);
+      setSubmissionStatus("submitting");
+
       try {
         const token = Cookies.get("access_token");
         const formDataToSend = new FormData();
@@ -85,6 +126,7 @@ export function BlogForm() {
         }
         formDataToSend.append("image", image);
 
+        // Initial post submission
         const response = await submitBlogPost(
           backendBaseURL,
           formDataToSend,
@@ -96,39 +138,18 @@ export function BlogForm() {
         }
 
         const data = await response.json();
-        setPublishedPostId(data.id);
+        setSubmissionStatus("processing");
 
-        let attempts = 0;
-        const maxAttempts = 30; // 30 seconds timeout
-
-        const checkStatus = async () => {
-          try {
-            const statusResponse = await fetch(
-              `${backendBaseURL}/api/v1/blog_posts/id/${data.id}`
-            );
-            const post = await statusResponse.json();
-
-            if (post.summary && post.short_summary) {
-              router.push("/");
-            } else if (attempts < maxAttempts) {
-              attempts++;
-              setTimeout(checkStatus, 1000);
-            } else {
-              // Timeout reached, redirect anyway
-              router.push("/");
-            }
-          } catch (error) {
-            console.error("Error checking status:", error);
-            router.push("/");
-          }
-        };
-
-        checkStatus();
+        setTimeout(() => {
+          setSubmissionStatus("success");
+          router.push("/");
+        }, 2000);
       } catch (error) {
         console.error("Submission error:", error);
         setErrors({
           submit: "Failed to create blog post. Please try again.",
         });
+        setSubmissionStatus("error");
         setIsSubmitting(false);
       }
     } else {
@@ -136,122 +157,230 @@ export function BlogForm() {
     }
   };
 
+  const getSubmitButtonContent = () => {
+    switch (submissionStatus) {
+      case "submitting":
+        return (
+          <>
+            <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2" />
+            Publishing...
+          </>
+        );
+      case "processing":
+        return (
+          <>
+            <div className="animate-pulse">Processing Content...</div>
+          </>
+        );
+      case "success":
+        return (
+          <>
+            <span className="text-green-500">✓</span>
+            Published Successfully
+          </>
+        );
+      case "error":
+        return "Try Again";
+      default:
+        return (
+          <>
+            <Upload className="mr-2" size={20} />
+            Publish Story
+          </>
+        );
+    }
+  };
+
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-lg shadow-lg">
-      <h1 className="text-3xl font-bold mb-6 text-center text-indigo-600">
-        Create Your Blog Post
-      </h1>
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="relative">
-          <input
-            type="text"
-            name="title"
-            id="title"
-            value={formData.title}
-            onChange={handleChange}
-            placeholder="Enter your captivating title"
-            className="w-full py-3 px-4 border-b-2 border-gray-300 focus:border-indigo-500 transition-colors duration-300 outline-none text-xl font-semibold"
-          />
-          {errors.title && (
-            <Alert variant="destructive" className="mt-2">
-              <AlertDescription>{errors.title}</AlertDescription>
-            </Alert>
-          )}
-        </div>
-        <div className="relative">
-          <Editor
-            apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-            init={{
-              height: 500,
-              menubar: true,
-              plugins: [
-                "advlist autolink lists link image charmap print preview anchor",
-                "searchreplace visualblocks code fullscreen",
-                "insertdatetime media table paste code help wordcount",
-                "codesample",
-                "lists",
-                "lists advlist",
-              ],
-              toolbar:
-                "undo redo | formatselect | bold italic backcolor | \
-                  alignleft aligncenter alignright alignjustify | \
-                  bullist numlist outdent indent | removeformat | code codesample | help | bullist numlist",
-              codesample_languages: [
-                { text: "HTML/XML", value: "markup" },
-                { text: "JavaScript", value: "javascript" },
-                { text: "CSS", value: "css" },
-                { text: "PHP", value: "php" },
-                { text: "Ruby", value: "ruby" },
-                { text: "Python", value: "python" },
-                { text: "Java", value: "java" },
-                { text: "C", value: "c" },
-                { text: "C#", value: "csharp" },
-                { text: "C++", value: "cpp" },
-                { text: "SQL", value: "sql" },
-                { text: "XML", value: "xml" },
-                { text: "JSON", value: "json" },
-              ],
-              content_style: `
-                  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.4; }
-                  pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
-                  code { font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; }
-                `,
-            }}
-            onEditorChange={handleEditorChange}
-          />
-          {errors.content && (
-            <Alert variant="destructive" className="mt-2">
-              <AlertDescription>{errors.content}</AlertDescription>
-            </Alert>
-          )}
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 py-12 px-4">
+      <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
+        {/* Header */}
+        <div className="p-8 border-b border-gray-200">
+          <h1 className="text-4xl font-bold text-gray-900 text-center">
+            Create Your Story
+          </h1>
+          <p className="mt-2 text-center text-gray-600">
+            Share your thoughts with the world
+          </p>
         </div>
 
-        <div className="flex space-x-4">
-          <div className="flex-1">
+        {/* Tab Navigation */}
+        <div className="flex border-b border-gray-200">
+          <button
+            onClick={() => setActiveSection("write")}
+            className={`flex-1 py-4 px-6 text-sm font-medium transition-colors duration-200 ${
+              activeSection === "write"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Write
+          </button>
+          <button
+            onClick={() => setActiveSection("preview")}
+            className={`flex-1 py-4 px-6 text-sm font-medium transition-colors duration-200 ${
+              activeSection === "preview"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-500 hover:text-gray-700"
+            }`}
+          >
+            Preview
+          </button>
+        </div>
+
+        <form onSubmit={handleSubmit} className="p-8">
+          {/* Title Input */}
+          <div className="mb-8 group">
             <input
               type="text"
-              name="category"
-              id="category"
-              value={formData.category}
+              name="title"
+              value={formData.title}
               onChange={handleChange}
-              placeholder="Category"
-              className="w-full py-2 px-3 border-2 border-gray-300 rounded-md focus:border-indigo-500 transition-colors duration-300 outline-none"
+              placeholder="Your Story Title"
+              className="w-full text-4xl font-bold border-none outline-none focus:ring-0 placeholder-gray-300 transition-all duration-300 bg-transparent"
             />
+            {errors.title && (
+              <Alert variant="destructive" className="mt-2">
+                <AlertDescription>{errors.title}</AlertDescription>
+              </Alert>
+            )}
+          </div>
+
+          {/* Category Input */}
+          <div className="mb-8 relative">
+            <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
+              <Tag className="text-gray-400" size={20} />
+              <input
+                type="text"
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                placeholder="Add category"
+                className="flex-1 bg-transparent border-none outline-none focus:ring-0"
+              />
+            </div>
             {errors.category && (
               <Alert variant="destructive" className="mt-2">
                 <AlertDescription>{errors.category}</AlertDescription>
               </Alert>
             )}
           </div>
-          <div className="flex-1">
-            <input
-              type="file"
-              name="image"
-              id="image"
-              value={formData.image}
-              onChange={handleImageChange}
-              accept="image/*"
-              className="w-full py-2 px-3 border-2 border-gray-300 rounded-md focus:border-indigo-500 transition-colors duration-300 outline-none"
-            />
+
+          {/* Image Upload Area */}
+          <div className="mb-8">
+            <div
+              onDrop={handleDrop}
+              onDragOver={handleDragOver}
+              onDragLeave={handleDragLeave}
+              className={`relative border-2 border-dashed rounded-lg p-8 transition-all duration-300 ${
+                isDragging
+                  ? "border-blue-500 bg-blue-50"
+                  : "border-gray-300 hover:border-gray-400"
+              }`}
+            >
+              {imagePreview ? (
+                <div className="relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-64 object-cover rounded-lg"
+                  />
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+              ) : (
+                <div className="text-center">
+                  <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                    <label className="relative cursor-pointer rounded-md bg-white font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-500">
+                      <span>Upload a file</span>
+                      <input
+                        type="file"
+                        className="sr-only"
+                        onChange={handleImageChange}
+                        accept="image/*"
+                      />
+                    </label>
+                    <p className="pl-1">or drag and drop</p>
+                  </div>
+                  <p className="text-xs leading-5 text-gray-600">
+                    PNG, JPG, GIF up to 2MB
+                  </p>
+                </div>
+              )}
+            </div>
             {errors.image && (
               <Alert variant="destructive" className="mt-2">
                 <AlertDescription>{errors.image}</AlertDescription>
               </Alert>
             )}
           </div>
-        </div>
 
-        <div className="text-center">
+          {/* Rich Text Editor */}
+          <div className="mb-8">
+            <Editor
+              apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
+              init={{
+                height: 500,
+                menubar: true,
+                plugins: [
+                  "advlist autolink lists link image charmap print preview anchor",
+                  "searchreplace visualblocks code fullscreen",
+                  "insertdatetime media table paste code help wordcount",
+                  "codesample",
+                  "lists",
+                  "lists advlist",
+                ],
+                toolbar:
+                  "undo redo | formatselect | bold italic backcolor | \
+                    alignleft aligncenter alignright alignjustify | \
+                    bullist numlist outdent indent | removeformat | code codesample | help | bullist numlist",
+                skin: "oxide",
+                content_css: "default",
+                content_style: `
+                    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.4; }
+                    pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
+                    code { font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; }
+                  `,
+              }}
+              onEditorChange={handleEditorChange}
+            />
+          </div>
+
+          {/* Submit Button */}
+          <div className="flex justify-end">
           <button
             type="submit"
             disabled={isSubmitting}
-            className="px-6 py-3 bg-indigo-600 text-white font-semibold rounded-full shadow-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition-all duration-300 transform hover:scale-105"
+            className={`flex items-center px-6 py-3 font-medium rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 ${
+              submissionStatus === 'success' 
+                ? 'bg-green-600 hover:bg-green-700'
+                : submissionStatus === 'error'
+                ? 'bg-red-600 hover:bg-red-700'
+                : 'bg-blue-600 hover:bg-blue-700'
+            } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+              submissionStatus === 'success'
+                ? 'focus:ring-green-500'
+                : 'focus:ring-blue-500'
+            }`}
           >
-            {isSubmitting ? "Publishing..." : "Publish Blog Post"}
+            {getSubmitButtonContent()}
           </button>
         </div>
-      </form>
-      {isSubmitting && <LoadingSpinner />}
+
+        {/* Error Message */}
+        {errors.submit && (
+          <Alert variant="destructive" className="mt-4">
+            <AlertDescription>{errors.submit}</AlertDescription>
+          </Alert>
+        )}
+        </form>
+      </div>
     </div>
   );
 }
