@@ -40,7 +40,7 @@ const AboutPage = () => {
   ];
 
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [profileImage, setProfileImage] = useState(null); 
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     const fetchActiveProfileImage = async () => {
@@ -168,10 +168,12 @@ const AboutPage = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-background border-t">
         <div className="max-w-3xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold mb-6">Got a project in mind?</h2>
-          <p className="text-lg text-gray-600 mb-12">
+          <h2 className="text-4xl font-bold mb-6 text-foreground">
+            Got a project in mind?
+          </h2>
+          <p className="text-lg text-muted-foreground mb-12">
             Whether you need secure software solutions or want to make sure your
             systems can withstand attacks, let&apos;s team up and build
             something rock-solid together.
@@ -180,9 +182,15 @@ const AboutPage = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              className="px-6 py-4 rounded-lg border border-gray-300 flex-1 max-w-md"
+              className="px-6 py-4 rounded-lg border border-input bg-background text-foreground 
+              flex-1 max-w-md placeholder:text-muted-foreground focus:outline-none focus:ring-2 
+              focus:ring-ring focus:border-input"
             />
-            <button className="px-8 py-4 bg-amber-900 text-white rounded-lg font-semibold hover:bg-amber-800 transition-colors">
+            <button
+              className="px-8 py-4 bg-amber-900 text-white rounded-lg font-semibold 
+              hover:bg-amber-800 transition-colors focus:outline-none focus:ring-2 
+              focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+            >
               Contact Me
             </button>
           </div>
