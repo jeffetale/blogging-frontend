@@ -3,12 +3,16 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { Card, CardContent } from "@/components/ui/card";
 import { SeekBar } from "./about-components/SeekBar";
 import { useEffect, useState } from "react";
 import { AboutPageImage } from "./HandleImages";
 
 const AboutPage = () => {
+  const router = useRouter();
+  const [email, setEmail] = useState("");
+
   const skills = [
     { name: "Frontend", level: 87 },
     { name: "Backend", level: 90 },
@@ -40,7 +44,7 @@ const AboutPage = () => {
   ];
 
   const backendBaseURL = process.env.NEXT_PUBLIC_BACKEND_URL;
-  const [profileImage, setProfileImage] = useState(null); 
+  const [profileImage, setProfileImage] = useState(null);
 
   useEffect(() => {
     const fetchActiveProfileImage = async () => {
@@ -72,6 +76,14 @@ const AboutPage = () => {
     fetchActiveProfileImage();
   }, [backendBaseURL]);
 
+  const handleContactClick = (e) => {
+    e.preventDefault();
+    if (email) {
+      localStorage.setItem("contactEmail", email);
+    }
+    router.push("/contact");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-gray-100">
       {/* Hero Section */}
@@ -84,14 +96,14 @@ const AboutPage = () => {
                 <h2 className="text-2xl font-semibold text-amber-900">
                   Hi, I am
                 </h2>
-                <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
+                <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-gray-100">
                   Jeff Etale
                 </h1>
                 <div className="space-y-1">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-200">
                     Software Engineer
                   </h2>
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-200">
                     &
                   </h2>
                   <h2 className="text-4xl md:text-5xl font-bold text-amber-900">
@@ -168,10 +180,12 @@ const AboutPage = () => {
       </section>
 
       {/* Contact Section */}
-      <section className="py-24 bg-gray-50">
+      <section className="py-24 bg-background border-t">
         <div className="max-w-3xl mx-auto text-center px-4">
-          <h2 className="text-4xl font-bold mb-6">Got a project in mind?</h2>
-          <p className="text-lg text-gray-600 mb-12">
+          <h2 className="text-4xl font-bold mb-6 text-foreground">
+            Got a project in mind?
+          </h2>
+          <p className="text-lg text-muted-foreground mb-12">
             Whether you need secure software solutions or want to make sure your
             systems can withstand attacks, let&apos;s team up and build
             something rock-solid together.
@@ -180,9 +194,18 @@ const AboutPage = () => {
             <input
               type="email"
               placeholder="Enter your email"
-              className="px-6 py-4 rounded-lg border border-gray-300 flex-1 max-w-md"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="px-6 py-4 rounded-lg border border-input bg-background text-foreground 
+              flex-1 max-w-md placeholder:text-muted-foreground focus:outline-none focus:ring-2 
+              focus:ring-ring focus:border-input"
             />
-            <button className="px-8 py-4 bg-amber-900 text-white rounded-lg font-semibold hover:bg-amber-800 transition-colors">
+            <button
+              onClick={handleContactClick}
+              className="px-8 py-4 bg-amber-900 text-white rounded-lg font-semibold 
+              hover:bg-amber-800 transition-colors focus:outline-none focus:ring-2 
+              focus:ring-ring focus:ring-offset-2 focus:ring-offset-background"
+            >
               Contact Me
             </button>
           </div>
