@@ -8,6 +8,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { compressImage } from "@/app/utils/imageUtils";
 import { submitBlogPost } from "@/app/utils/fetchUtils";
 import { X, Image as ImageIcon, Upload, Tag } from "lucide-react";
+import { BlogPreview } from "./BlogPreview";
 
 export function BlogForm() {
   const [formData, setFormData] = useState({
@@ -228,127 +229,128 @@ export function BlogForm() {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-8">
-          {/* Title Input */}
-          <div className="mb-8 group">
-            <input
-              type="text"
-              name="title"
-              value={formData.title}
-              onChange={handleChange}
-              placeholder="Your Story Title"
-              className="w-full text-4xl font-bold border-none outline-none focus:ring-0 placeholder-gray-300 transition-all duration-300 bg-transparent"
-            />
-            {errors.title && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertDescription>{errors.title}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-
-          {/* Category Input */}
-          <div className="mb-8 relative">
-            <div
-              className="flex items-center space-x-2 p-2 
-                bg-gray-50 dark:bg-gray-800 
-                rounded-lg"
-            >
-              <Tag className="text-gray-400" size={20} />
+        {activeSection === "write" ? (
+          <form onSubmit={handleSubmit} className="p-8">
+            {/* Title Input */}
+            <div className="mb-8 group">
               <input
                 type="text"
-                name="category"
-                value={formData.category}
+                name="title"
+                value={formData.title}
                 onChange={handleChange}
-                placeholder="Add category"
-                className="flex-1 bg-transparent border-none outline-none focus:ring-0
-                  text-gray-900 dark:text-gray-100 
-                  placeholder-gray-500 dark:placeholder-gray-400"
+                placeholder="Your Story Title"
+                className="w-full text-4xl font-bold border-none outline-none focus:ring-0 placeholder-gray-300 transition-all duration-300 bg-transparent"
               />
-            </div>
-            {errors.category && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertDescription>{errors.category}</AlertDescription>
-              </Alert>
-            )}
-          </div>
-
-          {/* Image Upload Area */}
-          <div className="mb-8">
-            <div
-              onDrop={handleDrop}
-              onDragOver={handleDragOver}
-              onDragLeave={handleDragLeave}
-              className={`relative border-2 border-dashed rounded-lg p-8 transition-all duration-300 ${
-                isDragging
-                  ? "border-blue-500 bg-blue-50"
-                  : "border-gray-300 hover:border-gray-400"
-              }`}
-            >
-              {imagePreview ? (
-                <div className="relative">
-                  <img
-                    src={imagePreview}
-                    alt="Preview"
-                    className="w-full h-64 object-cover rounded-lg"
-                  />
-                  <button
-                    type="button"
-                    onClick={removeImage}
-                    className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
-                  >
-                    <X size={16} />
-                  </button>
-                </div>
-              ) : (
-                <div className="text-center">
-                  <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
-                  <div className="mt-4 flex text-sm leading-6 text-gray-600">
-                    <label className="relative cursor-pointer rounded-md bg-white font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-500">
-                      <span>Upload a file</span>
-                      <input
-                        type="file"
-                        className="sr-only"
-                        onChange={handleImageChange}
-                        accept="image/*"
-                      />
-                    </label>
-                    <p className="pl-1">or drag and drop</p>
-                  </div>
-                  <p className="text-xs leading-5 text-gray-600">
-                    PNG, JPG, GIF up to 2MB
-                  </p>
-                </div>
+              {errors.title && (
+                <Alert variant="destructive" className="mt-2">
+                  <AlertDescription>{errors.title}</AlertDescription>
+                </Alert>
               )}
             </div>
-            {errors.image && (
-              <Alert variant="destructive" className="mt-2">
-                <AlertDescription>{errors.image}</AlertDescription>
-              </Alert>
-            )}
-          </div>
 
-          {/* Rich Text Editor */}
-          <div className="mb-8">
-            <Editor
-              apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
-              init={{
-                height: 500,
-                menubar: true,
-                plugins: [
-                  "advlist autolink lists link image charmap print preview anchor",
-                  "searchreplace visualblocks code fullscreen",
-                  "insertdatetime media table paste code help wordcount",
-                  "codesample",
-                  "lists",
-                  "lists advlist",
-                ],
-                toolbar:
-                  "undo redo | formatselect | bold italic backcolor | \
+            {/* Category Input */}
+            <div className="mb-8 relative">
+              <div
+                className="flex items-center space-x-2 p-2 
+                bg-gray-50 dark:bg-gray-800 
+                rounded-lg"
+              >
+                <Tag className="text-gray-400" size={20} />
+                <input
+                  type="text"
+                  name="category"
+                  value={formData.category}
+                  onChange={handleChange}
+                  placeholder="Add category"
+                  className="flex-1 bg-transparent border-none outline-none focus:ring-0
+                  text-gray-900 dark:text-gray-100 
+                  placeholder-gray-500 dark:placeholder-gray-400"
+                />
+              </div>
+              {errors.category && (
+                <Alert variant="destructive" className="mt-2">
+                  <AlertDescription>{errors.category}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            {/* Image Upload Area */}
+            <div className="mb-8">
+              <div
+                onDrop={handleDrop}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                className={`relative border-2 border-dashed rounded-lg p-8 transition-all duration-300 ${
+                  isDragging
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-300 hover:border-gray-400"
+                }`}
+              >
+                {imagePreview ? (
+                  <div className="relative">
+                    <img
+                      src={imagePreview}
+                      alt="Preview"
+                      className="w-full h-64 object-cover rounded-lg"
+                    />
+                    <button
+                      type="button"
+                      onClick={removeImage}
+                      className="absolute top-2 right-2 p-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors duration-200"
+                    >
+                      <X size={16} />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-center">
+                    <ImageIcon className="mx-auto h-12 w-12 text-gray-400" />
+                    <div className="mt-4 flex text-sm leading-6 text-gray-600">
+                      <label className="relative cursor-pointer rounded-md bg-white font-semibold text-blue-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-blue-600 focus-within:ring-offset-2 hover:text-blue-500">
+                        <span>Upload a file</span>
+                        <input
+                          type="file"
+                          className="sr-only"
+                          onChange={handleImageChange}
+                          accept="image/*"
+                        />
+                      </label>
+                      <p className="pl-1">or drag and drop</p>
+                    </div>
+                    <p className="text-xs leading-5 text-gray-600">
+                      PNG, JPG, GIF up to 2MB
+                    </p>
+                  </div>
+                )}
+              </div>
+              {errors.image && (
+                <Alert variant="destructive" className="mt-2">
+                  <AlertDescription>{errors.image}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+
+            {/* Rich Text Editor */}
+            <div className="mb-8">
+              <Editor
+                apiKey={process.env.NEXT_PUBLIC_TINYMCE_API_KEY}
+                init={{
+                  height: 500,
+                  menubar: true,
+                  plugins: [
+                    "advlist autolink lists link image charmap print preview anchor",
+                    "searchreplace visualblocks code fullscreen",
+                    "insertdatetime media table paste code help wordcount",
+                    "codesample",
+                    "lists",
+                    "lists advlist",
+                  ],
+                  toolbar:
+                    "undo redo | formatselect | bold italic backcolor | \
                     alignleft aligncenter alignright alignjustify | \
                     bullist numlist outdent indent | removeformat | code codesample | help | bullist numlist",
-                skin: "oxide-dark",
-                content_css: "dark",
-                content_style: `
+                  skin: "oxide-dark",
+                  content_css: "dark",
+                  content_style: `
                   body { 
                     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; 
                     line-height: 1.4; 
@@ -366,39 +368,42 @@ export function BlogForm() {
                     color: #e5e7eb;
                   }
                 `,
-              }}
-              onEditorChange={handleEditorChange}
-            />
-          </div>
+                }}
+                onEditorChange={handleEditorChange}
+              />
+            </div>
 
-          {/* Submit Button */}
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className={`flex items-center px-6 py-3 font-medium rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 ${
-                submissionStatus === "success"
-                  ? "bg-green-600 hover:bg-green-700"
-                  : submissionStatus === "error"
-                  ? "bg-red-600 hover:bg-red-700"
-                  : "bg-blue-600 hover:bg-blue-700"
-              } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-                submissionStatus === "success"
-                  ? "focus:ring-green-500"
-                  : "focus:ring-blue-500"
-              }`}
-            >
-              {getSubmitButtonContent()}
-            </button>
-          </div>
+            {/* Submit Button */}
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className={`flex items-center px-6 py-3 font-medium rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 ${
+                  submissionStatus === "success"
+                    ? "bg-green-600 hover:bg-green-700"
+                    : submissionStatus === "error"
+                    ? "bg-red-600 hover:bg-red-700"
+                    : "bg-blue-600 hover:bg-blue-700"
+                } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                  submissionStatus === "success"
+                    ? "focus:ring-green-500"
+                    : "focus:ring-blue-500"
+                }`}
+              >
+                {getSubmitButtonContent()}
+              </button>
+            </div>
 
-          {/* Error Message */}
-          {errors.submit && (
-            <Alert variant="destructive" className="mt-4">
-              <AlertDescription>{errors.submit}</AlertDescription>
-            </Alert>
-          )}
-        </form>
+            {/* Error Message */}
+            {errors.submit && (
+              <Alert variant="destructive" className="mt-4">
+                <AlertDescription>{errors.submit}</AlertDescription>
+              </Alert>
+            )}
+          </form>
+        ) : (
+          <BlogPreview formData={formData} imagePreview={imagePreview} />
+        )}
       </div>
     </div>
   );
