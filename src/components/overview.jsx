@@ -3,12 +3,13 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "./ui/card";
-import { Avatar, AvatarImage, AvatarFallback } from "./ui/avatar";
 import Link from "next/link";
 import useSWR from "swr";
 import { SidebarPostItem } from "./HandleImages";
 import { useState } from "react";
 import { OverviewSkeleton } from "./ui/HomeSkeleton";
+import { cardVariants, listItemVariants, containerVariants } from "./ui/AnimatedBlogs";
+import { motion } from "framer-motion";
 
 const fetcher = (url) => fetch(url).then((res) => res.json());
 
@@ -53,62 +54,97 @@ export function Overview({ setSelectedCategory }) {
   if (isLoading) return <OverviewSkeleton />;
 
   return (
-    <div>
-      <Card>
-        <CardHeader>
-          <h3 className="text-lg font-semibold">Categories</h3>
-        </CardHeader>
-        <CardContent>
-          <ul className="space-y-2">
-            <li>
-              <Link
-                href="#"
-                className="text-muted-foreground hover:text-foreground font-extrabold font-weight:800 "
-                prefetch={false}
-                onClick={() => setSelectedCategory("")}
-              >
-                Show All
-              </Link>
-            </li>
-            {Array.from(uniqueCategories).map((category, index) => (
-              <li key={index}>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: { opacity: 0 },
+        visible: {
+          opacity: 1,
+          transition: {
+            staggerChildren: 0.2,
+          },
+        },
+      }}
+      className="space-y-6"
+    >
+      {/* Categories Card */}
+      <motion.div variants={cardVariants} transition={{ duration: 0.5 }}>
+        <Card>
+          <CardHeader>
+            <h3 className="text-lg font-semibold">Categories</h3>
+          </CardHeader>
+          <CardContent>
+            <motion.ul
+              variants={containerVariants}
+              initial="hidden"
+              animate="visible"
+              className="space-y-2"
+            >
+              <motion.li variants={listItemVariants}>
                 <Link
                   href="#"
-                  className={`text-muted-foreground hover:text-foreground ${
-                    selectedCategory === category
-                      ? "text-foreground font-bold"
-                      : ""
-                  }`}
+                  className="text-muted-foreground hover:text-foreground font-extrabold"
                   prefetch={false}
-                  onClick={() => handleCategoryClick(category)}
+                  onClick={() => setSelectedCategory("")}
                 >
-                  {category}
+                  Show All
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </CardContent>
-      </Card>
-      <Card>
-        <CardHeader>
-          <h3 className="text-lg font-semibold">Popular Posts</h3>
-        </CardHeader>
-        <CardContent>
-          {postsError && <div>Failed to load popular posts</div>}
-          {postsLoading && <div>Loading popular posts...</div>}
-          {posts && (
-            <ul className="space-y-4">
-              {posts.map((post) => (
-                <SidebarPostItem
-                  key={post.id}
-                  post={post}
-                  backendBaseURL={backendBaseURL}
-                />
+              </motion.li>
+              {Array.from(uniqueCategories).map((category, index) => (
+                <motion.li key={index} variants={listItemVariants}>
+                  <Link
+                    href="#"
+                    className={`text-muted-foreground hover:text-foreground ${
+                      selectedCategory === category
+                        ? "text-foreground font-bold"
+                        : ""
+                    }`}
+                    prefetch={false}
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    {category}
+                  </Link>
+                </motion.li>
               ))}
-            </ul>
-          )}
-        </CardContent>
-      </Card>
-    </div>
+            </motion.ul>
+          </CardContent>
+        </Card>
+      </motion.div>
+
+      {/* Popular Posts Card */}
+      <motion.div variants={cardVariants} transition={{ duration: 0.5 }}>
+        <Card>
+          <CardHeader>
+            <h3 className="text-lg font-semibold">Popular Posts</h3>
+          </CardHeader>
+          <CardContent>
+            {postsError && <div>Failed to load popular posts</div>}
+            {postsLoading && <div>Loading popular posts...</div>}
+            {posts && (
+              <motion.ul
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                className="space-y-4"
+              >
+                {posts.map((post, index) => (
+                  <motion.li
+                    key={post.id}
+                    variants={listItemVariants}
+                    transition={{ duration: 0.3 }}
+                  >
+                    <SidebarPostItem
+                      post={post}
+                      backendBaseURL={backendBaseURL}
+                    />
+                  </motion.li>
+                ))}
+              </motion.ul>
+            )}
+          </CardContent>
+        </Card>
+      </motion.div>
+    </motion.div>
   );
 }
