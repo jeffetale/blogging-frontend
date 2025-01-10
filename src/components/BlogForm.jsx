@@ -196,7 +196,7 @@ export function BlogForm() {
       <div className="max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden">
         {/* Header */}
         <div className="p-8 border-b border-gray-200">
-          <h1 className="text-4xl font-bold text-gray-900 text-center">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 text-center">
             Create Your Story
           </h1>
           <p className="mt-2 text-center text-gray-600">
@@ -248,7 +248,11 @@ export function BlogForm() {
 
           {/* Category Input */}
           <div className="mb-8 relative">
-            <div className="flex items-center space-x-2 p-2 bg-gray-50 rounded-lg">
+            <div
+              className="flex items-center space-x-2 p-2 
+                bg-gray-50 dark:bg-gray-800 
+                rounded-lg"
+            >
               <Tag className="text-gray-400" size={20} />
               <input
                 type="text"
@@ -256,7 +260,9 @@ export function BlogForm() {
                 value={formData.category}
                 onChange={handleChange}
                 placeholder="Add category"
-                className="flex-1 bg-transparent border-none outline-none focus:ring-0"
+                className="flex-1 bg-transparent border-none outline-none focus:ring-0
+                  text-gray-900 dark:text-gray-100 
+                  placeholder-gray-500 dark:placeholder-gray-400"
               />
             </div>
             {errors.category && (
@@ -340,13 +346,26 @@ export function BlogForm() {
                   "undo redo | formatselect | bold italic backcolor | \
                     alignleft aligncenter alignright alignjustify | \
                     bullist numlist outdent indent | removeformat | code codesample | help | bullist numlist",
-                skin: "oxide",
-                content_css: "default",
+                skin: "oxide-dark",
+                content_css: "dark",
                 content_style: `
-                    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; line-height: 1.4; }
-                    pre { background-color: #f4f4f4; padding: 10px; border-radius: 4px; }
-                    code { font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; }
-                  `,
+                  body { 
+                    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif; 
+                    line-height: 1.4; 
+                    background-color: #1f2937; 
+                    color: #e5e7eb;
+                  }
+                  pre { 
+                    background-color: #374151; 
+                    padding: 10px; 
+                    border-radius: 4px; 
+                    color: #e5e7eb;
+                  }
+                  code { 
+                    font-family: Menlo, Monaco, Consolas, 'Courier New', monospace;
+                    color: #e5e7eb;
+                  }
+                `,
               }}
               onEditorChange={handleEditorChange}
             />
@@ -354,31 +373,31 @@ export function BlogForm() {
 
           {/* Submit Button */}
           <div className="flex justify-end">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`flex items-center px-6 py-3 font-medium rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 ${
-              submissionStatus === 'success' 
-                ? 'bg-green-600 hover:bg-green-700'
-                : submissionStatus === 'error'
-                ? 'bg-red-600 hover:bg-red-700'
-                : 'bg-blue-600 hover:bg-blue-700'
-            } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
-              submissionStatus === 'success'
-                ? 'focus:ring-green-500'
-                : 'focus:ring-blue-500'
-            }`}
-          >
-            {getSubmitButtonContent()}
-          </button>
-        </div>
+            <button
+              type="submit"
+              disabled={isSubmitting}
+              className={`flex items-center px-6 py-3 font-medium rounded-lg shadow-lg transition-all duration-300 transform hover:scale-105 ${
+                submissionStatus === "success"
+                  ? "bg-green-600 hover:bg-green-700"
+                  : submissionStatus === "error"
+                  ? "bg-red-600 hover:bg-red-700"
+                  : "bg-blue-600 hover:bg-blue-700"
+              } text-white focus:outline-none focus:ring-2 focus:ring-offset-2 ${
+                submissionStatus === "success"
+                  ? "focus:ring-green-500"
+                  : "focus:ring-blue-500"
+              }`}
+            >
+              {getSubmitButtonContent()}
+            </button>
+          </div>
 
-        {/* Error Message */}
-        {errors.submit && (
-          <Alert variant="destructive" className="mt-4">
-            <AlertDescription>{errors.submit}</AlertDescription>
-          </Alert>
-        )}
+          {/* Error Message */}
+          {errors.submit && (
+            <Alert variant="destructive" className="mt-4">
+              <AlertDescription>{errors.submit}</AlertDescription>
+            </Alert>
+          )}
         </form>
       </div>
     </div>

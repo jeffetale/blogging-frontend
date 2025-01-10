@@ -3,69 +3,67 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { LogoutButton } from "./Logout";
 import { useAuth } from "@/context/AuthContext";
 
 export function Navbar({ setSearchTerm }) {
   const { loggedIn } = useAuth();
+  const pathname = usePathname();
+
+  const NavLink = ({ href, children }) => {
+    const isActive = pathname === href;
+    return (
+      <Link
+        href={href}
+        prefetch={false}
+        className={`relative py-2 transition-colors duration-300
+          ${
+            isActive
+              ? "text-primary font-medium"
+              : "text-muted-foreground hover:text-foreground"
+          }
+          group
+        `}
+      >
+        {children}
+        <span
+          className={`absolute bottom-0 left-0 w-full h-0.5 bg-primary transform origin-left transition-transform duration-300
+            ${isActive ? "scale-x-100" : "scale-x-0"}
+            group-hover:scale-x-100
+          `}
+        />
+      </Link>
+    );
+  };
 
   return (
-    <header className="bg-background border-b shadow-sm">
+    <header className="bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-50 w-full border-b shadow-sm">
       <div className="container mx-auto px-4 py-4 md:py-6 flex items-center justify-between">
-        <Link href="#" className="flex items-center gap-2" prefetch={false}>
+        <Link
+          href="/"
+          className="flex items-center gap-2 transition-opacity hover:opacity-80"
+          prefetch={false}
+        >
           <FeatherIcon className="w-6 h-6 text-primary" />
           <span className="text-lg font-semibold">Blog</span>
         </Link>
-        <nav className="hidden md:flex items-center gap-6">
-          <Link
-            href="/"
-            className="text-muted-foreground hover:text-foreground"
-            prefetch={false}
-          >
-            Home
-          </Link>
-          <Link
-            href="/about"
-            className="text-muted-foreground hover:text-foreground"
-            prefetch={false}
-          >
-            About
-          </Link>
-          <Link
-            href="/new_blog"
-            className="text-muted-foreground hover:text-foreground"
-            prefetch={false}
-          >
-            Blog
-          </Link>
-          <Link
-            href="/contact"
-            className="text-muted-foreground hover:text-foreground"
-            prefetch={false}
-          >
-            Contact
-          </Link>
-          {loggedIn && <LogoutButton />}
+
+        <nav className="hidden md:flex items-center gap-8">
+          <NavLink href="/">Home</NavLink>
+          <NavLink href="/about">About</NavLink>
+          <NavLink href="/new_blog">Blog</NavLink>
+          <NavLink href="/contact">Contact</NavLink>
           {loggedIn && (
-            <Link
-              href="/admin"
-              className="text-muted-foreground hover:text-foreground"
-              prefetch={false}
-            >
-              Profile
-            </Link>
+            <>
+              <NavLink href="/admin">Profile</NavLink>
+              <LogoutButton />
+            </>
           )}
         </nav>
+
         <div className="relative hidden md:block">
-          {/* <div className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground">
-            <SearchIcon className="w-4 h-4" />
-          </div>
-          <Input
-            type="search"
-            placeholder="Search..."
-            className="pl-8 pr-4 py-2 rounded-md bg-muted text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary"
-            onChange={(e) => setSearchTerm(e.target.value)}
-          /> */}
+          {/* Search functionality commented out as in original */}
         </div>
       </div>
     </header>

@@ -71,10 +71,10 @@ export function Contact() {
       <div className="max-w-4xl mx-auto">
         {/* Header Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+          <h1 className="text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">
             Get in Touch
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
             Have a question or want to work together? I&apos;d love to hear from
             you. Drop me a message and I&apos;ll get back to you as soon as
             possible.
@@ -98,7 +98,7 @@ export function Contact() {
             <form onSubmit={handleSubmit} className="space-y-6">
               {/* Name Input */}
               <div className="relative">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-gray-200 dark:text-gray-200 mb-1 block">
                   Name
                 </label>
                 <div className="relative">
@@ -110,9 +110,18 @@ export function Contact() {
                     name="name"
                     value={formData.name}
                     onChange={handleChange}
-                    className={`block w-full pl-10 pr-3 py-3 border ${
-                      errors.name ? "border-red-300" : "border-gray-300"
-                    } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out`}
+                    className={`block w-full pl-10 pr-3 py-3 
+                      bg-white dark:bg-gray-800 
+                      text-gray-900 dark:text-gray-100 
+                      placeholder-gray-500 dark:placeholder-gray-400
+                      border ${
+                        errors.name
+                          ? "border-red-300"
+                          : "border-gray-300 dark:border-gray-600"
+                      }
+                      rounded-lg 
+                      focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                      transition duration-150 ease-in-out`}
                     placeholder="John Doe"
                   />
                 </div>
@@ -123,7 +132,7 @@ export function Contact() {
 
               {/* Email Input */}
               <div className="relative">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-gray-200 dark:text-gray-200 mb-1 block">
                   Email
                 </label>
                 <div className="relative">
@@ -135,9 +144,18 @@ export function Contact() {
                     name="email"
                     value={formData.email}
                     onChange={handleChange}
-                    className={`block w-full pl-10 pr-3 py-3 border ${
-                      errors.email ? "border-red-300" : "border-gray-300"
-                    } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out`}
+                    className={`block w-full pl-10 pr-3 py-3 
+                      bg-white dark:bg-gray-800 
+                      text-gray-900 dark:text-gray-100 
+                      placeholder-gray-500 dark:placeholder-gray-400
+                      border ${
+                        errors.email
+                          ? "border-red-300"
+                          : "border-gray-300 dark:border-gray-600"
+                      }
+                      rounded-lg 
+                      focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                      transition duration-150 ease-in-out`}
                     placeholder="john@example.com"
                   />
                 </div>
@@ -148,7 +166,7 @@ export function Contact() {
 
               {/* Message Input */}
               <div className="relative">
-                <label className="text-sm font-medium text-gray-700 mb-1 block">
+                <label className="text-sm font-medium text-gray-200 mb-1 block">
                   Message
                 </label>
                 <div className="relative">
@@ -160,9 +178,14 @@ export function Contact() {
                     value={formData.message}
                     onChange={handleChange}
                     rows="5"
-                    className={`block w-full pl-10 pr-3 py-3 border ${
-                      errors.message ? "border-red-300" : "border-gray-300"
-                    } rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-150 ease-in-out`}
+                    className={`block w-full pl-10 pr-3 py-3 
+                      bg-gray-800 text-gray-100 placeholder-gray-400
+                      border ${
+                        errors.message ? "border-red-300" : "border-gray-600"
+                      }
+                      rounded-lg 
+                      focus:ring-2 focus:ring-blue-500 focus:border-transparent 
+                      transition duration-150 ease-in-out`}
                     placeholder="Your message here..."
                   />
                 </div>

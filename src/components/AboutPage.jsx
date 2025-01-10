@@ -84,14 +84,14 @@ const AboutPage = () => {
                 <h2 className="text-2xl font-semibold text-amber-900">
                   Hi, I am
                 </h2>
-                <h1 className="text-5xl md:text-6xl font-bold text-gray-900">
+                <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-gray-100">
                   Jeff Etale
                 </h1>
                 <div className="space-y-1">
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-200">
                     Software Engineer
                   </h2>
-                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800">
+                  <h2 className="text-4xl md:text-5xl font-bold text-gray-800 dark:text-gray-200">
                     &
                   </h2>
                   <h2 className="text-4xl md:text-5xl font-bold text-amber-900">
